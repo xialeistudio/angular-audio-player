@@ -206,8 +206,12 @@
 				$scope.loading_text = '搜索中...';
 				var promise = MusicService.search($scope.keyword);
 				promise.then(function(data){
-					$scope.searchList = data.song;
 					$scope.loading = false;
+					if(data != null){
+						$scope.searchList = data.song;
+					}else{
+						alert('搜索失败')
+					}
 				},function(data){
 					$scope.loading = false;
 					alert('查找失败');

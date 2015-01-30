@@ -37,9 +37,9 @@
 
 <div class="container">
 	<div class="col-md-3">
-		<div class="player">
+		<div class="player" ng-show="song">
 			<!--歌曲图片-->
-			<img ng-class="{true:'active',false:''}[playing]" ng-src="api/img.php?img={{song.pic_big}}" class="album_img" alt="{{song.title}}"/>
+			<img ng-class="{true:'active',false:''}[playing]" ng-src="api/img.php?img={{song.pic_big||'img/mp3.png'}}" class="album_img" alt="{{song.title}}"/>
 
 			<h2 ng-bind="{{song.title}}"></h2>
 			<small>{{song.author}} | {{song.album_title}} | {{song.language}} | 音量：{{player.volume}}</small>
