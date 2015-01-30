@@ -112,29 +112,35 @@
 			$scope.player = {
 				volume: player.volume
 			};
+			$scope.song = {};
 			$scope.play = function(item) {
 				//计算是否有上一首
-				$scope.song = item;
-				var index = $scope.billboard.list.indexOf(item);
-				$scope.hasPrev = index > 0;
-				$scope.hasNext = index <= $scope.billboard.list.length;
-				//根据song_id，查询song信息
-				$scope.loading = true;
-				$scope.loading_text = '加载歌曲中...';
-				$http.get('api/song.php?song_id=' + item.song_id,{
-					cache:true
-				}).success(function(data) {
-					$scope.loading = false;
-					if (data.error) {
-						alert(data.error);
-					}
-					else {
-						//事件监听
-						$scope.song.link = 'api/song.php?song_id=' + item.song_id;
-						$scope.playing = true;
-						player.play($scope.song);
-					}
-				});
+				if(item.song_id != $scope.song.song_id || item.song_id == $scope.song.songid){
+					$scope.song = item;
+					var index = $scope.billboard.list.indexOf(item);
+					$scope.hasPrev = index > 0;
+					$scope.hasNext = index <= $scope.billboard.list.length;
+					//根据song_id，查询song信息
+					$scope.loading = true;
+					$scope.loading_text = '加载歌曲中...';
+					$http.get('api/song.php?song_id=' + item.song_id,{
+						cache:true
+					}).success(function(data) {
+						$scope.loading = false;
+						if (data.error) {
+							alert(data.error);
+						}
+						else {
+							//事件监听
+							$scope.song.link = 'api/song.php?song_id=' + item.song_id;
+							$scope.playing = true;
+							player.play();
+						}
+					});
+				}else{
+					player.play();
+					$scope.playing = true;
+				}
 			};
 
 			$scope.playSearch = function(item) {
