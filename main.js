@@ -23,9 +23,7 @@
 			return {
 				hot: function(offset, size) {
 					var defer = $q.defer();
-					$http.get('api/list.php?type=2&size=' + size + '&offset=' + offset, {
-						cache: true
-					}).success(function(data) {
+					$http.get('api/list.php?type=2&size=' + size + '&offset=' + offset).success(function(data) {
 						defer.resolve(data);
 					}).error(function(err) {
 						defer.reject(err);
@@ -34,9 +32,7 @@
 				},
 				recent: function(offset, size) {
 					var defer = $q.defer();
-					$http.get('api/list.php?type=1&size=' + size + '&offset=' + offset, {
-						cache: true
-					}).success(function(data) {
+					$http.get('api/list.php?type=1&size=' + size + '&offset=' + offset).success(function(data) {
 						defer.resolve(data);
 					}).error(function(err) {
 						defer.reject(err);
@@ -121,9 +117,7 @@
 				//根据song_id，查询song信息
 				$scope.loading = true;
 				$scope.loading_text = '加载歌曲中...';
-				$http.get('api/song.php?song_id=' + item.song_id, {
-					cache: true
-				}).success(function(data) {
+				$http.get('api/song.php?song_id=' + item.song_id).success(function(data) {
 					$scope.loading = false;
 					if (data.error) {
 						alert(data.error);
@@ -147,9 +141,7 @@
 				//根据song_id，查询song信息
 				$scope.loading = true;
 				$scope.loading_text = '加载歌曲中...';
-				$http.get('api/song.php?song_id=' + item.songid, {
-					cache: true
-				}).success(function(data) {
+				$http.get('api/song.php?song_id=' + item.songid).success(function(data) {
 					$scope.loading = false;
 					if (data.error) {
 						alert(data.error);
