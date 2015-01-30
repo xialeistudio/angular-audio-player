@@ -224,7 +224,7 @@
 					if (target != undefined) {
 						var dom = angular.element(document.querySelector(target));
 						ele.bind('click', function() {
-							dom.toggleClass('hidden');
+							dom.toggleClass('active');
 						});
 					}
 				}

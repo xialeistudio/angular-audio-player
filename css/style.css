@@ -3,7 +3,7 @@ body {
   font-size: 14px;
   padding: 0;
 }
-.collapse {
+.collapse.active {
   display: block;
 }
 h1,
