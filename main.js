@@ -121,7 +121,9 @@
 				//根据song_id，查询song信息
 				$scope.loading = true;
 				$scope.loading_text = '加载歌曲中...';
-				$http.get('api/song.php?song_id=' + item.song_id).success(function(data) {
+				$http.get('api/song.php?song_id=' + item.song_id,{
+					cache:true
+				}).success(function(data) {
 					$scope.loading = false;
 					if (data.error) {
 						alert(data.error);
@@ -146,7 +148,9 @@
 				//根据song_id，查询song信息
 				$scope.loading = true;
 				$scope.loading_text = '加载歌曲中...';
-				$http.get('api/song.php?song_id=' + item.songid).success(function(data) {
+				$http.get('api/song.php?song_id=' + item.songid,{
+					cache:true
+				}).success(function(data) {
 					$scope.loading = false;
 					if (data.error) {
 						alert(data.error);
@@ -155,7 +159,7 @@
 						//事件监听
 						$scope.song.link = 'api/song.php?song_id=' + item.songid;
 						$scope.playing = true;
-						player.play($scope.song);
+						player.play();
 					}
 				});
 			};
