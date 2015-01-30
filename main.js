@@ -23,7 +23,9 @@
 			return {
 				hot: function(offset, size) {
 					var defer = $q.defer();
-					$http.get('api/list.php?type=2&size=' + size + '&offset=' + offset).success(function(data) {
+					$http.get('api/list.php?type=2&size=' + size + '&offset=' + offset,{
+						cache:true
+					}).success(function(data) {
 						defer.resolve(data);
 					}).error(function(err) {
 						defer.reject(err);
@@ -32,7 +34,9 @@
 				},
 				recent: function(offset, size) {
 					var defer = $q.defer();
-					$http.get('api/list.php?type=1&size=' + size + '&offset=' + offset).success(function(data) {
+					$http.get('api/list.php?type=1&size=' + size + '&offset=' + offset,{
+						cache:true
+					}).success(function(data) {
 						defer.resolve(data);
 					}).error(function(err) {
 						defer.reject(err);
@@ -126,6 +130,7 @@
 						//事件监听
 						$scope.song.link = 'api/song.php?song_id=' + item.song_id;
 						$scope.playing = true;
+						player.play($scope.song);
 					}
 				});
 			};
@@ -150,6 +155,7 @@
 						//事件监听
 						$scope.song.link = 'api/song.php?song_id=' + item.songid;
 						$scope.playing = true;
+						player.play($scope.song);
 					}
 				});
 			};

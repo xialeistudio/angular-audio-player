@@ -66,7 +66,7 @@
 
 		<section>
 			<!--搜索-->
-			<form action="" method="get" class="form-horizontal">
+			<div class="form-horizontal">
 				<div class="form-group">
 					<div class="col-xs-8">
 						<input type="text" ng-model="keyword" placeholder="歌名、歌手" class="form-control input-sm"/>
@@ -75,12 +75,13 @@
 						<button type="button" class="btn btn-sm btn-primary btn-block" ng-click="search()"> 搜索</button>
 					</div>
 				</div>
-			</form>
+			</div>
 
 			<div class="list-group">
 				<div class="list-group-item clearfix" ng-repeat="item in searchList">
 					<div class="pull-left">
-						<i class="fa fa-play text-success" ng-if="playing && song.songid == item.songid"></i> {{item.songname}} <small>{{item.artistname}}</small>
+						<i class="fa fa-play text-success" ng-if="playing && song.songid == item.songid"></i> {{item.songname}}
+						<small>{{item.artistname}}</small>
 					</div>
 					<div class="pull-right">
 						<a href="javascript:void(0)" ng-click="playSearch(item)" ng-if="!playing || song.songid != item.songid">播放</a>
@@ -94,13 +95,18 @@
 	<div class="col-md-9">
 		<h2 ng-init="hot()">{{billboard.title}}
 		</h2>
+
 		<div>
-			<small>更新日期：{{billboard.update_at}}</small></div>
+			<small>更新日期：{{billboard.update_at}}</small>
+		</div>
 		<p ng-bind="billboard.desc"></p>
+
 		<div class="list-group">
 			<div class="list-group-item clearfix" ng-repeat="item in billboard.list">
 				<div class="pull-left"><i class="fa fa-play text-success" ng-if="playing && song.song_id == item.song_id"></i>
-					{{item.title}} <small>{{item.author}}</small></div>
+					{{item.title}}
+					<small>{{item.author}}</small>
+				</div>
 				<div class="pull-right">
 					<a href="javascript:void(0)" ng-click="play(item)" ng-if="!playing || song.song_id != item.song_id">播放</a>
 					<a href="javascript:void(0)" ng-click="pause()" ng-if="playing && song.song_id == item.song_id">暂停</a>
