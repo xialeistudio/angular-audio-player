@@ -80,7 +80,7 @@
 			<div class="list-group">
 				<div class="list-group-item clearfix" ng-repeat="item in searchList">
 					<div class="pull-left">
-						<i class="fa fa-play text-success" ng-if="playing && song.songid == item.songid"></i> {{item.songname|limitTo:'7'}} <small>{{item.artistname|limitTo:'4'}}</small>
+						<i class="fa fa-play text-success" ng-if="playing && song.songid == item.songid"></i> {{item.songname}} <small>{{item.artistname}}</small>
 					</div>
 					<div class="pull-right">
 						<a href="javascript:void(0)" ng-click="playSearch(item)" ng-if="!playing || song.songid != item.songid">播放</a>
@@ -100,7 +100,7 @@
 		<div class="list-group">
 			<div class="list-group-item clearfix" ng-repeat="item in billboard.list">
 				<div class="pull-left"><i class="fa fa-play text-success" ng-if="playing && song.song_id == item.song_id"></i>
-					{{item.title|limitTo:'7'}} <small>{{item.author|limitTo:'4'}}</small></div>
+					{{item.title}} <small>{{item.author}}</small></div>
 				<div class="pull-right">
 					<a href="javascript:void(0)" ng-click="play(item)" ng-if="!playing || song.song_id != item.song_id">播放</a>
 					<a href="javascript:void(0)" ng-click="pause()" ng-if="playing && song.song_id == item.song_id">暂停</a>
