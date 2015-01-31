@@ -306,6 +306,7 @@
 					min = parseInt(input / 60);
 					sec = input - 60 * min;
 					min = min > 10 ? min : '0' + min;
+					sec = sec > 10 ? sec : '0' + sec;
 				}
 				else {
 					sec = input > 10 ? input : '0' + input;
