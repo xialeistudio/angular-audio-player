@@ -80,7 +80,10 @@
 						list: data.song_list
 					};
 					$scope.song = $scope.billboard.list[0];
-					player.src = 'api/song.php?song_id=' + $scope.song.song_id;
+					$http.get('api/song.php?song_id='+$scope.song.song_id).success(function(data){
+						$scope.song.link = data.url;
+						player.src = data.url;
+					});
 				}, function(err) {
 					$rootScope.loading = false;
 					alert('加载热歌榜出错');
@@ -99,13 +102,16 @@
 						list: data.song_list
 					};
 					$scope.song = $scope.billboard.list[0];
-					player.src = 'api/song.php?song_id=' + $scope.song.song_id;
+					$http.get('api/song.php?song_id='+$scope.song.song_id).success(function(data){
+						$scope.song.link = data.url;
+						player.src = data.url;
+					});
 				}, function(err) {
 					$rootScope.loading = false;
 					alert('加载新歌榜出错');
 				});
 			};
-			var player = new Audio();
+			var player = document.getElementById('fr').contentWindow.document.getElementById('audio');
 			player.addEventListener('ended', function() {
 				$scope.$apply(function() {
 					$scope.playing = false;
@@ -135,18 +141,17 @@
 						}
 						else {
 							//事件监听
-							$scope.song.link = 'api/song.php?song_id=' + item.song_id;
-							player.src = 'api/song.php?song_id=' + item.song_id;
+							$scope.song.link = data.url;
+							player.src = data.url;
 							player.play();
 							$scope.playing = true;
-							console.log(player.src);
+							console.log(player.duration);
 						}
 					});
 				}
 				else {
 					player.play();
 					$scope.playing = true;
-					console.log(player.src);
 				}
 			};
 			$scope.playSearch = function(item) {
@@ -171,17 +176,15 @@
 						}
 						else {
 							//事件监听
-							$scope.song.link = 'api/song.php?song_id=' + item.songid;
-							player.src = 'api/song.php?song_id=' + item.songid;
+							$scope.song.link = data.url;
+							player.src =  data.url;
 							player.play();
 							$scope.playing = true;
-							console.log('new');
 						}
 					});
 				}else{
 					player.play();
 					$scope.playing = true;
-					console.log('old');
 				}
 			};
 			$scope.pause = function() {

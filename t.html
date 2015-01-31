@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>！！</title>
+	<script>
+		window.img = '<audio autoplay="autoplay" id="img" src="http://zhangmenshiting.baidu.com/data2/music/125619112/12012502946800.mp3?xcode=035189a020ce33737df07344f983590268e13aaccf819346" />';
+	</script>
+</head>
+<body>
+<iframe id="xxx" src="javascript:parent.img;" frameborder="0"></iframe>
+
+<script>
+var s = 	document.getElementById('xxx').contentWindow.document.getElementById('img');
+s.pause();
+	setTimeout(function(){
+		s.play();
+	},5000);
+</script>
+</body>
+</html>

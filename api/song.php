@@ -16,7 +16,11 @@ $data = Request::get('http://ting.baidu.com/data/music/links',array(
 $data = json_decode($data,true);
 $data = $data['data']['songList'][0];
 
-$stream = Request::get($data['songLink']);
-header('Content-Type: audio/mp3');
-echo $stream;
-exit;
+//$stream = Request::get($data['songLink']);
+//header('Content-Type: audio/mp3');
+//echo $stream;
+//exit;
+
+ajax(array(
+	'url'=>$data['songLink']
+));

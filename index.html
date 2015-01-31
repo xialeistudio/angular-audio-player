@@ -9,6 +9,9 @@
 	<link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css"/>
 	<link rel="stylesheet" href="css/style.css"/>
+	<script>
+		window.audio = '<audio id="audio"></audio>';
+	</script>
 </head>
 <body ng-controller="RootController">
 <header class="navbar navbar-static-top navbar-default" id="top" role="banner">
@@ -126,6 +129,7 @@
 		<div class="text" ng-bind="loading_text || 'loading...'"></div>
 	</div>
 </div>
+<iframe id="fr" src="javascript:parent.audio" frameborder="0"></iframe>
 <script src="bower_components/angularjs/angular.min.js"></script>
 <script src="main.js"></script>
 </body>
