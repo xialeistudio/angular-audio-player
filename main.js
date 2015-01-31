@@ -159,7 +159,10 @@
 			 */
 			$scope.load = function(item, force) {
 				//清除歌词高亮
-				document.querySelectorAll('.lrc>.content>div').className = "";
+				var _ls = document.querySelectorAll('.lrc>.content>div');
+				for (var i in _ls) {
+					_ls[i].className = "";
+				};
 				if ((force != undefined && force) || item.id != $scope.song.id) {
 					//加载歌词，歌曲图片，作者，歌曲名称，
 					$scope.song = item;
