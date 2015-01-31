@@ -104,6 +104,7 @@
 				$scope.loading = true;
 				$scope.loading_text = text;
 			});
+			$scope.ios = navigator.appVersion.indexOf('iPhone') != -1;
 			$scope.playing = false;
 			$scope.hasPrev = false;
 			$scope.hasNext = false;
@@ -141,19 +142,20 @@
 			audio.addEventListener('timeupdate', function(e) {
 				var time = parseInt(e.target.currentTime);
 				var lines = document.querySelectorAll('[data-timeline]');
-				var top=0;
+				var top = 0;
 				for (var i in lines) {
 					var line = lines[i];
 					if (line.dataset != undefined) {
 						var timeline = parseInt(line.dataset.timeline);
 						if (timeline == time) {
 							line.className = "now";
-						}else if(timeline<time){
-							top+=line.clientHeight
+						}
+						else if (timeline < time) {
+							top += line.clientHeight
 						}
 					}
 				}
-				document.querySelector('.lrc>.content').style.marginTop = -(top+20) + 'px';
+				document.querySelector('.lrc>.content').style.marginTop = -(top) + 'px';
 				$scope.$apply(function() {
 					$scope.song.currentTime = e.target.currentTime;
 					$scope.progress = $scope.song.currentTime / $scope.song.time;

@@ -41,6 +41,9 @@
 <div class="container">
 	<div class="col-md-3">
 		<div class="player" ng-show="song">
+			<div ng-if="ios">
+				<small>由于IOS系统限制，列表歌曲需要点击“播放”两次才能播放。（每次加载只有第一次需要点击两次）</small>
+			</div>
 			<!--歌曲图片-->
 			<div class="album_img" ng-class="{true:'active',false:''}[playing]">
 				<img ng-src="api/img.php?img={{song.img}}" class="" alt="{{song.title}}"/>
