@@ -27,8 +27,16 @@
 		</div>
 		<nav class="collapse navbar-collapse xl-navbar-collapse" role="navigation">
 			<ul class="nav navbar-nav">
-				<li><a href="javascript:void(0)" ng-click="recent()">新歌榜</a></li>
-				<li><a href="javascript:void(0)" ng-click="hot()">热歌榜</a></li>
+				<li><a href="javascript:void(0)" ng-click="common.title = '新歌榜';loadList(1)">新歌榜</a></li>
+				<li><a href="javascript:void(0)" ng-click="common.title = '热歌榜';loadList(2)">热歌榜</a></li>
+				<li><a href="javascript:void(0)" ng-click="common.title = '摇滚榜';loadList(11)">摇滚榜</a></li>
+				<li><a href="javascript:void(0)" ng-click="common.title = '爵士榜';loadList(12)">爵士榜</a></li>
+				<li><a href="javascript:void(0)" ng-click="common.title = '流行榜';loadList(16)">流行榜</a></li>
+				<li><a href="javascript:void(0)" ng-click="common.title = '欧美流行榜';loadList(21)">欧美流行榜</a></li>
+				<li><a href="javascript:void(0)" ng-click="common.title = '经典老歌榜';loadList(22)">经典老歌榜</a></li>
+				<li><a href="javascript:void(0)" ng-click="common.title = '情歌对唱榜';loadList(23)">情歌对唱榜</a></li>
+				<li><a href="javascript:void(0)" ng-click="common.title = '影视金曲榜';loadList(24)">影视金曲榜</a></li>
+				<li><a href="javascript:void(0)" ng-click="common.title = '网络歌曲榜';loadList(25)">网络歌曲榜</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="http://music.baidu.com" target="_blank">百度音乐</a></li>
@@ -97,7 +105,7 @@
 		</div>
 	</div>
 	<div class="col-md-9">
-		<h2 ng-init="hot()">{{common.title}}
+		<h2 ng-init="loadList(2)">{{common.title}}
 		</h2>
 
 		<div>

@@ -24,6 +24,11 @@ if (isset($data['error_code']) && $data['error_code'] == 22005)
 			'error' => '歌词加载失败'
 	));
 }
+if(!isset($data['title'])){
+	ajax(array(
+			'error' => '歌词加载失败'
+	));
+}
 ajax(array(
 		'title' => $data['title'],
 		'content' => $data['lrcContent']

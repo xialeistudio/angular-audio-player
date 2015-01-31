@@ -28,20 +28,9 @@
 	ting.factory('MusicService', [
 		'$http', '$q', function($http, $q) {
 			return {
-				hot: function(offset, size) {
+				list: function(type, offset, size) {
 					var defer = $q.defer();
-					$http.get('api/list.php?type=2&size=' + size + '&offset=' + offset, {
-						cache: true
-					}).success(function(data) {
-						defer.resolve(data);
-					}).error(function(err) {
-						defer.reject(err);
-					});
-					return defer.promise;
-				},
-				recent: function(offset, size) {
-					var defer = $q.defer();
-					$http.get('api/list.php?type=1&size=' + size + '&offset=' + offset, {
+					$http.get('api/list.php?type=' + type + '&size=' + size + '&offset=' + offset, {
 						cache: true
 					}).success(function(data) {
 						defer.resolve(data);
@@ -170,7 +159,7 @@
 			 */
 			$scope.load = function(item, force) {
 				//清除歌词高亮
-				document.querySelectorAll('.lrc>.content>div').className="";
+				document.querySelectorAll('.lrc>.content>div').className = "";
 				if ((force != undefined && force) || item.id != $scope.song.id) {
 					//加载歌词，歌曲图片，作者，歌曲名称，
 					$scope.song = item;
@@ -206,7 +195,7 @@
 							}
 							$scope.song.lrc = html;
 						}, function(err) {
-							$scope.l_prev = err;
+							$scope.song.lrc = err;
 						});
 						//
 						audio.play();
@@ -230,35 +219,25 @@
 			/**
 			 * 热歌榜
 			 */
-			$scope.hot = function() {
+			$scope.loadList = function(type) {
 				$scope.$emit('loading', '加载热歌榜...');
-				var promise = MusicService.hot(0, 40);
+				var promise = MusicService.list(type, 0, 40);
 				promise.then(function(data) {
 					$scope.loading = false;
-					$scope.common = data.common;
+					if (data.common.title.length > 0) {
+						$scope.common = data.common;
+					}
+					else {
+						var _t = $scope.common.title;
+						$scope.common = data.common;
+						$scope.common.title = _t;
+					}
 					$scope.list = data.list;
 					//设置预播歌曲
 					$scope.load($scope.list[0]);
 				}, function(err) {
 					$scope.loading = false;
 					alert('加载热歌榜出错');
-				});
-			};
-			/**
-			 * 新歌榜
-			 */
-			$scope.recent = function() {
-				$scope.$emit('loading', '加载新歌榜...');
-				var promise = MusicService.recent(0, 40);
-				promise.then(function(data) {
-					$scope.loading = false;
-					$scope.common = data.common;
-					$scope.list = data.list;
-					//设置预播歌曲
-					$scope.load($scope.list[0]);
-				}, function(err) {
-					$scope.loading = false;
-					alert('加载新歌榜出错');
 				});
 			};
 			/**
