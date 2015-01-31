@@ -24,7 +24,7 @@
 				hot: function(offset, size) {
 					var defer = $q.defer();
 					$http.get('api/list.php?type=2&size=' + size + '&offset=' + offset, {
-						cache: true
+						cache: false
 					}).success(function(data) {
 						defer.resolve(data);
 					}).error(function(err) {
@@ -35,7 +35,7 @@
 				recent: function(offset, size) {
 					var defer = $q.defer();
 					$http.get('api/list.php?type=1&size=' + size + '&offset=' + offset, {
-						cache: true
+						cache: false
 					}).success(function(data) {
 						defer.resolve(data);
 					}).error(function(err) {
@@ -66,7 +66,7 @@
 			});
 			$scope.playing = false;
 			$scope.hasPrev = false;
-			$scope.hasNext = false;
+			$scope.hasNext = true;
 			$scope.hot = function() {
 				$rootScope.loading = true;
 				$rootScope.loading_text = '加载热歌榜...';
@@ -133,7 +133,7 @@
 					$scope.loading = true;
 					$scope.loading_text = '加载歌曲中...';
 					$http.get('api/song.php?song_id=' + item.song_id, {
-						cache: true
+						cache: false
 					}).success(function(data) {
 						$scope.loading = false;
 						if (data.error) {
@@ -145,11 +145,12 @@
 							player.src = data.url;
 							player.play();
 							$scope.playing = true;
-							console.log(player.duration);
+							console.log(player.src);
 						}
 					});
 				}
 				else {
+					console.log(player.src);
 					player.play();
 					$scope.playing = true;
 				}
@@ -168,7 +169,7 @@
 					$scope.loading = true;
 					$scope.loading_text = '加载歌曲中...';
 					$http.get('api/song.php?song_id=' + item.songid, {
-						cache: true
+						cache: false
 					}).success(function(data) {
 						$scope.loading = false;
 						if (data.error) {

