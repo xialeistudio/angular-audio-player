@@ -79,7 +79,8 @@
 						update_at: data.billboard.update_date,
 						list: data.song_list
 					};
-					$scope.play($scope.billboard.list[0]);
+					//$scope.play($scope.billboard.list[0]);
+					$scope.song = $scope.billboard.list[0];
 				}, function(err) {
 					$rootScope.loading = false;
 					alert('加载热歌榜出错');
@@ -97,7 +98,8 @@
 						update_at: data.billboard.update_date,
 						list: data.song_list
 					};
-					$scope.play($scope.billboard.list[0]);
+					//$scope.play($scope.billboard.list[0]);
+					$scope.song = $scope.billboard.list[0];
 				}, function(err) {
 					$rootScope.loading = false;
 					alert('加载新歌榜出错');
