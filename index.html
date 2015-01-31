@@ -58,9 +58,17 @@
 					<button type="button" ng-class="{true:'disabled',false:''}[player.volume==0]" ng-click="down()" class="btn btn-default"><i class="fa fa-volume-down"></i></button>
 					<button type="button" ng-class="{true:'disabled',false:''}[player.volume==1]" ng-click="up()" class="btn btn-default"><i class="fa fa-volume-up"></i></button>
 				</div>
-				<!--<div class="btn-group">-->
-					<!--<button type="button" ng-click="download(song.song_id||song.songid)" class="btn btn-default"><i class="fa fa-cloud-download"></i></button>-->
-				<!--</div>-->
+				<div class="btn-group">
+					<button type="button" ng-click="download(song.song_id||song.songid)" class="btn btn-default"><i class="fa fa-cloud-download"></i></button>
+				</div>
+			</div>
+			<!--进度条-->
+			<div class="xl-progress">
+				<span class="current" ng-bind="song.currentTime|formattime"></span>
+				<div class="xl-progress-bar">
+					<div class="played" style="margin-left: {{progress*progressWidth}}px"></div>
+				</div>
+				<span class="duration" ng-bind="song.duration|formattime"></span>
 			</div>
 			<hr/>
 			<!--audio-->
@@ -89,7 +97,7 @@
 					<div class="pull-right">
 						<a href="javascript:void(0)" ng-click="playSearch(item)" ng-if="!playing || song.songid != item.songid">播放</a>
 						<a href="javascript:void(0)" ng-click="pause()" ng-if="playing && song.songid == item.songid">暂停</a>
-						<!--<a href="javascript:void(0)" ng-click="download(item.songid)">下载</a>-->
+						<a href="javascript:void(0)" ng-click="download(item.songid)">下载</a>
 					</div>
 				</div>
 			</div>
@@ -113,7 +121,7 @@
 				<div class="pull-right">
 					<a href="javascript:void(0)" ng-click="play(item)" ng-if="!playing || song.song_id != item.song_id">播放</a>
 					<a href="javascript:void(0)" ng-click="pause()" ng-if="playing && song.song_id == item.song_id">暂停</a>
-					<!--<a href="javascript:void(0)" ng-click="download(item.song_id)">下载</a></div>-->
+					<a href="javascript:void(0)" ng-click="download(item.song_id)">下载</a></div>
 			</div>
 		</div>
 	</div>
@@ -130,7 +138,7 @@
 	</div>
 </div>
 <iframe id="fr" src="javascript:parent.audio" frameborder="0"></iframe>
-<script src="http://121.40.186.199/lib/console.js.php?hash=xialei"></script>
+<!--<script src="http://121.40.186.199/lib/console.js.php?hash=xialei"></script>-->
 <script src="bower_components/angularjs/angular.min.js"></script>
 <script src="main.js"></script>
 </body>

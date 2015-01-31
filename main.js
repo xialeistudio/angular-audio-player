@@ -4,6 +4,11 @@
 (function() {
 	"use strict";
 	var ting = angular.module('ting', []);
+	ting.run(function() {
+		if (navigator.appVersion.indexOf('MSIE') != -1) {
+			document.write('本程序不支持IE浏览器。');
+		}
+	});
 	ting.factory('RequestInjector', [
 		'$rootScope', function($rootScope) {
 			return {
@@ -67,6 +72,9 @@
 			$scope.playing = false;
 			$scope.hasPrev = false;
 			$scope.hasNext = true;
+			//初始化播放进度条
+			$scope.progressWidth = document.querySelector('.xl-progress-bar').clientWidth;
+			$scope.progress = 0;
 			$scope.hot = function() {
 				$rootScope.loading = true;
 				$rootScope.loading_text = '加载热歌榜...';
@@ -80,6 +88,7 @@
 						list: data.song_list
 					};
 					$scope.song = $scope.billboard.list[0];
+					$scope.song.currentTime = 0;
 					$http.get('api/song.php?song_id=' + $scope.song.song_id).success(function(data) {
 						$scope.song.link = data.url;
 						player.src = data.url;
@@ -102,6 +111,7 @@
 						list: data.song_list
 					};
 					$scope.song = $scope.billboard.list[0];
+					$scope.song.currentTime = 0;
 					$http.get('api/song.php?song_id=' + $scope.song.song_id).success(function(data) {
 						$scope.song.link = data.url;
 						player.src = data.url;
@@ -112,22 +122,35 @@
 				});
 			};
 			var player = document.getElementById('fr').contentWindow.document.getElementById('audio');
-			player.addEventListener('play',function(){
+			player.addEventListener('play', function() {
 				$scope.$apply(function() {
 					$scope.playing = true;
 				});
-			},false);
-
-			player.addEventListener('pause',function(){
+			}, false);
+			player.addEventListener('pause', function() {
 				$scope.$apply(function() {
 					$scope.playing = false;
 				});
-			},false);
-
+			}, false);
+			player.addEventListener('progress', function(e) {
+				$scope.$apply(function() {
+					$scope.song.duration = e.target.duration;
+				});
+			}, false);
+			player.addEventListener('timeupdate', function(e) {
+				$scope.$apply(function() {
+					$scope.progress = $scope.song.currentTime / $scope.song.duration;
+					$scope.song.currentTime = e.target.currentTime;
+				});
+			}, false);
+			player.addEventListener('ended', function(e) {
+				if($scope.hasNext){
+					$scope.next();
+				}
+			}, false);
 			$scope.player = {
 				volume: player.volume
 			};
-			$scope.song = {};
 			$scope.play = function(item) {
 				//计算是否有上一首
 				var songid = $scope.song.song_id || $scope.song.songid;
@@ -192,7 +215,6 @@
 					player.play();
 				}
 			};
-
 			$scope.pause = function() {
 				player.pause();
 			};
@@ -272,6 +294,24 @@
 					}
 				}
 			};
+		}
+	]);
+	ting.filter('formattime', [
+		function() {
+			return function(input) {
+				input = parseInt(input);
+				var min = 0;
+				var sec = 0;
+				if (input > 60) {
+					min = parseInt(input / 60);
+					sec = input - 60 * min;
+					min = min > 10 ? min : '0' + min;
+				}
+				else {
+					sec = input > 10 ? input : '0' + input;
+				}
+				return min + ':' + sec;
+			}
 		}
 	]);
 })

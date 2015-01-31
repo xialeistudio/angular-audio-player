@@ -204,3 +204,35 @@ hr {
 		-moz-transform: rotate(360deg);
 	}
 }
+.xl-progress{
+	width: 100%;
+	margin: 4px 0;
+	.current,
+	.duration{
+		display: inline-block;
+		color: #999;
+		font-size: .8em;
+	}
+	.xl-progress-bar{
+		width: 65%;
+		display: inline-block;
+		height: 10px;
+		background: #f1f1f1;
+		margin-bottom: -1px;
+		border-radius: 4px;
+		-webkit-border-radius: 4px;
+		.played{
+			width: 10px;
+			height: 10px;
+			background: rgba(0,0,0,0.7);
+			display: block;
+			border-radius: 10px;
+			-webkit-border-radius: 10px;
+			box-shadow: 0 0 4px 0 rgba(0,0,0,0.3);
+			-webkit-box-shadow: 0 0 4px 0 rgba(0,0,0,0.3);
+		}
+	}
+}
+hr{
+	margin-top: 0;
+}
