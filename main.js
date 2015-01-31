@@ -57,9 +57,27 @@
 					});
 					return defer.promise;
 				},
+				base: function(id) {
+					var defer = $q.defer();
+					$http.get('api/song.php?song_id=' + id, {
+						cache: true
+					}).success(function(data) {
+						if (data.error) {
+							defer.reject(data.error);
+						}
+						else {
+							defer.resolve(data);
+						}
+					}).error(function(err) {
+						defer.reject('加载出错');
+					});
+					return defer.promise;
+				},
 				lrc: function(song_id) {
 					var defer = $q.defer();
-					$http.get('api/lrc.php?song_id=' + song_id).success(function(data) {
+					$http.get('api/lrc.php?song_id=' + song_id, {
+						cache: true
+					}).success(function(data) {
 						if (data.error) {
 							defer.reject(data.error);
 						}
@@ -79,231 +97,130 @@
 		'$rootScope',
 		'$http',
 		'$scope', function(MusicService, $rootScope, $http, $scope) {
-			//加载文案
-			$rootScope.$on('body:loading_text', function(e, text) {
-				$rootScope.loading_text = text;
+			//加载文字
+			$rootScope.$on('loading', function(e, text) {
+				$scope.loading = true;
+				$scope.loading_text = text;
 			});
 			$scope.playing = false;
 			$scope.hasPrev = false;
-			$scope.hasNext = true;
+			$scope.hasNext = false;
 			$scope.playMode = 1;//默认播放全部
-			//初始化播放进度条
-			$scope.progressWidth = document.querySelector('.xl-progress-bar').clientWidth;
-			$scope.progress = 0;
-			$scope.hot = function() {
-				$rootScope.loading = true;
-				$rootScope.loading_text = '加载热歌榜...';
-				var promise = MusicService.hot(0, 40);
-				promise.then(function(data) {
-					$rootScope.loading = false;
-					$scope.billboard = {
-						title: '热歌榜',
-						desc: data.billboard.comment,
-						update_at: data.billboard.update_date,
-						list: data.song_list
-					};
-					$scope.song = $scope.billboard.list[0];
-					$scope.song.currentTime = 0;
-					$http.get('api/song.php?song_id=' + $scope.song.song_id).success(function(data) {
-						$scope.song.link = data.songLink;
-						player.src = data.songLink;
-						$scope.song.pic_big = data.songPicSmall;
-						$scope.song.lrc = 'http://zhangmenshiting.baidu.com'+data.lrcLink;
-						$scope.song.album_title = data.albumName;
-						$scope.song.duration = data.time;
-					});
-				}, function(err) {
-					$rootScope.loading = false;
-					alert('加载热歌榜出错');
-				});
-			};
-			$scope.news = function() {
-				$rootScope.loading = true;
-				$rootScope.loading_text = '加载新歌榜...';
-				var promise = MusicService.recent(0, 40);
-				promise.then(function(data) {
-					$rootScope.loading = false;
-					$scope.billboard = {
-						title: '新歌榜',
-						desc: data.billboard.comment,
-						update_at: data.billboard.update_date,
-						list: data.song_list
-					};
-					$scope.song = $scope.billboard.list[0];
-					$scope.song.currentTime = 0;
-					$http.get('api/song.php?song_id=' + $scope.song.song_id).success(function(data) {
-						$scope.song.link = data.songLink;
-						player.src = data.songLink;
-						$scope.song.pic_big = data.songPicSmall;
-						$scope.song.lrc = 'http://zhangmenshiting.baidu.com'+data.lrcLink;
-						$scope.song.album_title = data.albumName;
-						$scope.song.duration = data.time;
-					});
-				}, function(err) {
-					$rootScope.loading = false;
-					alert('加载新歌榜出错');
-				});
-			};
-			var player = document.getElementById('fr').contentWindow.document.getElementById('audio');
-			player.addEventListener('play', function() {
+			$scope.keyword = '';
+			$scope.song = {};
+			var audio = document.getElementById('fr').contentWindow.document.getElementById('audio');
+			//事件监听
+			audio.addEventListener('play', function() {
 				$scope.$apply(function() {
 					$scope.playing = true;
 				});
 			}, false);
-			player.addEventListener('pause', function() {
+			audio.addEventListener('pause', function() {
 				$scope.$apply(function() {
 					$scope.playing = false;
 				});
 			}, false);
-			//player.addEventListener('progress', function(e) {
-			//	$scope.$apply(function() {
-			//		$scope.song.duration = e.target.duration;
-			//	});
-			//}, false);
-			player.addEventListener('timeupdate', function(e) {
-				$scope.$apply(function() {
-					$scope.progress = $scope.song.currentTime / $scope.song.duration;
-					$scope.song.currentTime = e.target.currentTime;
-				});
-			}, false);
-			player.addEventListener('ended', function(e) {
+			audio.addEventListener('ended', function() {
 				if ($scope.playMode == 1) {
 					if ($scope.hasNext) {
 						$scope.next();
 					}
+					else {
+						$scope.load($scope.list[0]);
+					}
 				}
 				else {
-					//单曲循环
-					$scope.play($scope.song);
+					$scope.load($scope.song, true);
 				}
 			}, false);
-			$scope.player = {
-				volume: player.volume
-			};
-			$scope.play = function(item) {
-				//计算是否有上一首
-				var songid = $scope.song.song_id || $scope.song.songid;
-				if (songid != item.song_id) {
+			$scope.progressWidth = document.querySelector('.xl-progress-bar').clientWidth;
+			$scope.progress = 0;
+			audio.addEventListener('timeupdate', function(e) {
+				$scope.$apply(function() {
+					$scope.song.currentTime = e.target.currentTime;
+					$scope.progress = $scope.song.currentTime / $scope.song.time;
+				});
+			}, false);
+			/**
+			 * 设置将要播放的歌曲
+			 * @param item
+			 * @param force
+			 */
+			$scope.load = function(item, force) {
+				if ((force != undefined && force) || item.id != $scope.song.id) {
+					//加载歌词，歌曲图片，作者，歌曲名称，
 					$scope.song = item;
-					var index = $scope.billboard.list.indexOf(item);
-					$scope.hasPrev = index > 0;
-					$scope.hasNext = index <= $scope.billboard.list.length;
-					//根据song_id，查询song信息
-					$scope.loading = true;
-					$scope.loading_text = '加载歌曲中...';
-					$http.get('api/song.php?song_id=' + item.song_id, {
-						cache: true
-					}).success(function(data) {
+					$scope.$emit('loading', '加载【' + $scope.song.title + '】');
+					var promise = MusicService.base(item.id);
+					promise.then(function(data) {
 						$scope.loading = false;
-						if (data.error) {
-							alert(data.error);
-						}
-						else {
-							//事件监听
-							$scope.song.link = data.songLink;
-							player.src = data.songLink;
-							$scope.song.pic_big = data.songPicSmall;
-							$scope.song.lrc = 'http://zhangmenshiting.baidu.com'+data.lrcLink;
-							$scope.song.album_title = data.albumName;
-							$scope.song.duration = data.time;
-							player.play();
-						}
+						$scope.song.img = data.img;
+						$scope.song.author = data.author;
+						$scope.song.title = data.title;
+						$scope.song.time = data.time;
+						$scope.song.currentTime = 0;
+						$scope.song.src = data.audio;
+						audio.src = data.audio;
+						//计算上一首，下一首
+						var _index = $scope.list.indexOf(item);
+						var _maxIndex = $scope.list.length - 1;
+						$scope.hasPrev = _index > 0;
+						$scope.hasNext = _index <= _maxIndex;
+						audio.play();
+					}, function(err) {
+						$scope.loading = false;
+						alert('加载歌曲出错')
 					});
 				}
 				else {
-					player.play();
+					audio.play();
 				}
 			};
-			$scope.playSearch = function(item) {
-				//计算是否有上一首
-				var songid = $scope.song.song_id || $scope.song.songid;
-				if (songid != item.songid) {
-					$scope.song = item;
-					$scope.song.author = item.artistname;
-					$scope.song.pic_big = 'img/mp3.png';
-					var index = $scope.searchList.indexOf(item);
-					$scope.hasPrev = index > 0;
-					$scope.hasNext = index <= $scope.searchList.length;
-					//根据song_id，查询song信息
-					$scope.loading = true;
-					$scope.loading_text = '加载歌曲中...';
-					$http.get('api/song.php?song_id=' + item.songid, {
-						cache: true
-					}).success(function(data) {
-						$scope.loading = false;
-						if (data.error) {
-							alert(data.error);
-						}
-						else {
-							//事件监听
-							$scope.song.link = data.songLink;
-							player.src = data.songLink;
-							$scope.song.pic_big = data.songPicSmall;
-							$scope.song.lrc = 'http://zhangmenshiting.baidu.com'+data.lrcLink;
-							$scope.song.album_title = data.albumName;
-							$scope.song.duration = data.time;
-							player.play();
-						}
-					});
-				}
-				else {
-					player.play();
-				}
+			//播放歌曲
+			$scope.play = function() {
+				audio.play();
 			};
+			//暂停
 			$scope.pause = function() {
-				player.pause();
+				audio.pause();
 			};
-			$scope.prev = function() {
-				var index = $scope.billboard.list.indexOf($scope.song);
-				var song;
-				if (index == -1) {
-					song = $scope.billboard.list[0];
-				}
-				else {
-					song = $scope.billboard.list[--index];
-				}
-				$scope.play(song);
+			$scope.hot = function() {
+				$scope.$emit('loading', '加载热歌榜...');
+				var promise = MusicService.hot(0, 40);
+				promise.then(function(data) {
+					$scope.loading = false;
+					$scope.common = data.common;
+					$scope.list = data.list;
+					//设置预播歌曲
+					$scope.load($scope.list[0]);
+				}, function(err) {
+					$scope.loading = false;
+					alert('加载热歌榜出错');
+				});
 			};
-			$scope.next = function() {
-				var index = $scope.billboard.list.indexOf($scope.song);
-				var song;
-				if (index == -1) {
-					song = $scope.billboard.list[0];
-				}
-				else {
-					song = $scope.billboard.list[++index];
-				}
-				$scope.play(song);
+			$scope.recent = function() {
+				$scope.$emit('loading', '加载新歌榜...');
+				var promise = MusicService.recent(0, 40);
+				promise.then(function(data) {
+					$scope.loading = false;
+					$scope.common = data.common;
+					$scope.list = data.list;
+					//设置预播歌曲
+					$scope.load($scope.list[0]);
+				}, function(err) {
+					$scope.loading = false;
+					alert('加载新歌榜出错');
+				});
 			};
-			$scope.supported = function() {
-				return navigator.appVersion.indexOf('iPhone') == -1;
-			};
-			$scope.down = function() {
-				if (player.volume > 0) {
-					player.volume -= 0.1;
-					$scope.player.volume = parseFloat($scope.player.volume);
-					$scope.player.volume = ($scope.player.volume - 0.1).toFixed(1);
-				}
-			};
-			$scope.up = function() {
-				if (player.volume < 1) {
-					player.volume += 0.1;
-					$scope.player.volume = parseFloat($scope.player.volume);
-					$scope.player.volume = ($scope.player.volume + 0.1).toFixed(1);
-				}
-			};
-			$scope.download = function(id) {
-				window.open('api/download.php?song_id=' + id);
-			};
-			$scope.keyword = '';
 			$scope.search = function() {
-				$scope.loading = true;
-				$scope.loading_text = '搜索中...';
+				$scope.$emit('loading', '搜索【' + $scope.keyword + '】');
 				var promise = MusicService.search($scope.keyword);
 				promise.then(function(data) {
 					$scope.loading = false;
 					if (data != null) {
-						$scope.searchList = data.song;
+						$scope.loading = false;
+						$scope.common = data.common;
+						$scope.list = data.list;
 					}
 					else {
 						alert('搜索失败')
@@ -312,6 +229,14 @@
 					$scope.loading = false;
 					alert('查找失败');
 				});
+			};
+			$scope.prev = function() {
+				var _index = $scope.list.indexOf($scope.song);
+				$scope.load($scope.list[--_index]);
+			};
+			$scope.next = function() {
+				var _index = $scope.list.indexOf($scope.song);
+				$scope.load($scope.list[++_index]);
 			};
 		}
 	]);

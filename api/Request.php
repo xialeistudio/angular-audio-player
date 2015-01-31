@@ -44,8 +44,12 @@ class Request
 		if(isset($cookiesavepath)) curl_setopt($ch,CURLOPT_COOKIEJAR,$cookiesavepath);
 		//执行请求
 		$resp = curl_exec($ch);
+		$info = curl_getinfo($ch);
 		//关闭句柄，释放资源
 		curl_close($ch);
+		if($info['http_code'] != 200){
+			throw new Exception('请求出错');
+		}
 		return $resp;
 	}
 
@@ -79,7 +83,11 @@ class Request
 		//设置cookie保存路径
 		if(isset($cookiesavepath)) curl_setopt($ch,CURLOPT_COOKIEJAR,$cookiesavepath);
 		$resp=curl_exec($ch);
+		$info = curl_getinfo($ch);
 		curl_close($ch);
+		if($info['http_code'] != 200){
+			throw new Exception('请求出错');
+		}
 		return $resp;
 	}
 }
