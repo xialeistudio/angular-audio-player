@@ -56,6 +56,20 @@
 						defer.reject(err);
 					});
 					return defer.promise;
+				},
+				lrc: function(song_id) {
+					var defer = $q.defer();
+					$http.get('api/lrc.php?song_id=' + song_id).success(function(data) {
+						if (data.error) {
+							defer.reject(data.error);
+						}
+						else {
+							defer.resolve(data);
+						}
+					}).error(function(err) {
+						defer.reject('加载出错');
+					});
+					return defer.promise;
 				}
 			}
 		}
@@ -72,6 +86,7 @@
 			$scope.playing = false;
 			$scope.hasPrev = false;
 			$scope.hasNext = true;
+			$scope.playMode = 1;//默认播放全部
 			//初始化播放进度条
 			$scope.progressWidth = document.querySelector('.xl-progress-bar').clientWidth;
 			$scope.progress = 0;
@@ -90,8 +105,12 @@
 					$scope.song = $scope.billboard.list[0];
 					$scope.song.currentTime = 0;
 					$http.get('api/song.php?song_id=' + $scope.song.song_id).success(function(data) {
-						$scope.song.link = data.url;
-						player.src = data.url;
+						$scope.song.link = data.songLink;
+						player.src = data.songLink;
+						$scope.song.pic_big = data.songPicSmall;
+						$scope.song.lrc = 'http://zhangmenshiting.baidu.com'+data.lrcLink;
+						$scope.song.album_title = data.albumName;
+						$scope.song.duration = data.time;
 					});
 				}, function(err) {
 					$rootScope.loading = false;
@@ -113,8 +132,12 @@
 					$scope.song = $scope.billboard.list[0];
 					$scope.song.currentTime = 0;
 					$http.get('api/song.php?song_id=' + $scope.song.song_id).success(function(data) {
-						$scope.song.link = data.url;
-						player.src = data.url;
+						$scope.song.link = data.songLink;
+						player.src = data.songLink;
+						$scope.song.pic_big = data.songPicSmall;
+						$scope.song.lrc = 'http://zhangmenshiting.baidu.com'+data.lrcLink;
+						$scope.song.album_title = data.albumName;
+						$scope.song.duration = data.time;
 					});
 				}, function(err) {
 					$rootScope.loading = false;
@@ -132,11 +155,11 @@
 					$scope.playing = false;
 				});
 			}, false);
-			player.addEventListener('progress', function(e) {
-				$scope.$apply(function() {
-					$scope.song.duration = e.target.duration;
-				});
-			}, false);
+			//player.addEventListener('progress', function(e) {
+			//	$scope.$apply(function() {
+			//		$scope.song.duration = e.target.duration;
+			//	});
+			//}, false);
 			player.addEventListener('timeupdate', function(e) {
 				$scope.$apply(function() {
 					$scope.progress = $scope.song.currentTime / $scope.song.duration;
@@ -144,8 +167,14 @@
 				});
 			}, false);
 			player.addEventListener('ended', function(e) {
-				if($scope.hasNext){
-					$scope.next();
+				if ($scope.playMode == 1) {
+					if ($scope.hasNext) {
+						$scope.next();
+					}
+				}
+				else {
+					//单曲循环
+					$scope.play($scope.song);
 				}
 			}, false);
 			$scope.player = {
@@ -171,15 +200,17 @@
 						}
 						else {
 							//事件监听
-							$scope.song.link = data.url;
-							player.src = data.url;
+							$scope.song.link = data.songLink;
+							player.src = data.songLink;
+							$scope.song.pic_big = data.songPicSmall;
+							$scope.song.lrc = 'http://zhangmenshiting.baidu.com'+data.lrcLink;
+							$scope.song.album_title = data.albumName;
+							$scope.song.duration = data.time;
 							player.play();
-							console.log(player.src);
 						}
 					});
 				}
 				else {
-					console.log(player.src);
 					player.play();
 				}
 			};
@@ -205,8 +236,12 @@
 						}
 						else {
 							//事件监听
-							$scope.song.link = data.url;
-							player.src = data.url;
+							$scope.song.link = data.songLink;
+							player.src = data.songLink;
+							$scope.song.pic_big = data.songPicSmall;
+							$scope.song.lrc = 'http://zhangmenshiting.baidu.com'+data.lrcLink;
+							$scope.song.album_title = data.albumName;
+							$scope.song.duration = data.time;
 							player.play();
 						}
 					});

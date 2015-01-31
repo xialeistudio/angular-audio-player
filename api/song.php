@@ -21,6 +21,5 @@ $data = $data['data']['songList'][0];
 //echo $stream;
 //exit;
 
-ajax(array(
-	'url'=>$data['songLink']
-));
+
+ajax($data);
