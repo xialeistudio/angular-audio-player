@@ -115,7 +115,8 @@
 			$scope.song = {};
 			$scope.play = function(item) {
 				//计算是否有上一首
-				if (item.song_id != $scope.song.song_id || item.song_id == $scope.song.songid) {
+				var songid = $scope.song.song_id || $scope.song.songid;
+				if (songid!=item.song_id) {
 					$scope.song = item;
 					var index = $scope.billboard.list.indexOf(item);
 					$scope.hasPrev = index > 0;
@@ -140,37 +141,44 @@
 					});
 				}
 				else {
-					player.src = 'api/song.php?song_id=' + item.song_id;
 					player.play();
 					$scope.playing = true;
 				}
 			};
 			$scope.playSearch = function(item) {
 				//计算是否有上一首
-				$scope.song = item;
-				$scope.song.author = item.artistname;
-				$scope.song.pic_big = 'img/mp3.png';
-				var index = $scope.searchList.indexOf(item);
-				$scope.hasPrev = index > 0;
-				$scope.hasNext = index <= $scope.searchList.length;
-				//根据song_id，查询song信息
-				$scope.loading = true;
-				$scope.loading_text = '加载歌曲中...';
-				$http.get('api/song.php?song_id=' + item.songid, {
-					cache: true
-				}).success(function(data) {
-					$scope.loading = false;
-					if (data.error) {
-						alert(data.error);
-					}
-					else {
-						//事件监听
-						$scope.song.link = 'api/song.php?song_id=' + item.songid;
-						player.src = 'api/song.php?song_id=' + item.songid;
-						player.play();
-						$scope.playing = true;
-					}
-				});
+				var songid = $scope.song.song_id || $scope.song.songid;
+				if(songid!=item.songid){
+					$scope.song = item;
+					$scope.song.author = item.artistname;
+					$scope.song.pic_big = 'img/mp3.png';
+					var index = $scope.searchList.indexOf(item);
+					$scope.hasPrev = index > 0;
+					$scope.hasNext = index <= $scope.searchList.length;
+					//根据song_id，查询song信息
+					$scope.loading = true;
+					$scope.loading_text = '加载歌曲中...';
+					$http.get('api/song.php?song_id=' + item.songid, {
+						cache: true
+					}).success(function(data) {
+						$scope.loading = false;
+						if (data.error) {
+							alert(data.error);
+						}
+						else {
+							//事件监听
+							$scope.song.link = 'api/song.php?song_id=' + item.songid;
+							player.src = 'api/song.php?song_id=' + item.songid;
+							player.play();
+							$scope.playing = true;
+							console.log('new');
+						}
+					});
+				}else{
+					player.play();
+					$scope.playing = true;
+					console.log('old');
+				}
 			};
 			$scope.pause = function() {
 				$scope.playing = false;
