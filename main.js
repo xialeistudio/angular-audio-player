@@ -143,15 +143,17 @@
 				var time = parseInt(e.target.currentTime);
 				var lines = document.querySelectorAll('[data-timeline]');
 				var top = 0;
+				var _thisHeight = 0;
 				for (var i in lines) {
 					var line = lines[i];
 					if (line.dataset != undefined) {
 						var timeline = parseInt(line.dataset.timeline);
 						if (timeline == time) {
+							_thisHeight = line.clientHeight;
 							line.className = "now";
 						}
 						else if (timeline < time) {
-							top += line.clientHeight
+							top += line.clientHeight;
 						}
 					}
 				}
@@ -317,6 +319,7 @@
 					sec = sec > 10 ? sec : '0' + sec;
 				}
 				else {
+					min = '00';
 					sec = input > 10 ? input : '0' + input;
 				}
 				return min + ':' + sec;
