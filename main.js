@@ -79,7 +79,6 @@
 						update_at: data.billboard.update_date,
 						list: data.song_list
 					};
-					//$scope.play($scope.billboard.list[0]);
 					$scope.song = $scope.billboard.list[0];
 				}, function(err) {
 					$rootScope.loading = false;
@@ -98,14 +97,13 @@
 						update_at: data.billboard.update_date,
 						list: data.song_list
 					};
-					//$scope.play($scope.billboard.list[0]);
 					$scope.song = $scope.billboard.list[0];
 				}, function(err) {
 					$rootScope.loading = false;
 					alert('加载新歌榜出错');
 				});
 			};
-			var player = document.querySelector('audio');
+			var player = new Audio();
 			player.addEventListener('ended', function() {
 				$scope.$apply(function() {
 					$scope.playing = false;
@@ -135,12 +133,14 @@
 						else {
 							//事件监听
 							$scope.song.link = 'api/song.php?song_id=' + item.song_id;
-							$scope.playing = true;
+							player.src = 'api/song.php?song_id=' + item.song_id;
 							player.play();
+							$scope.playing = true;
 						}
 					});
 				}
 				else {
+					player.src = 'api/song.php?song_id=' + item.song_id;
 					player.play();
 					$scope.playing = true;
 				}
@@ -166,8 +166,9 @@
 					else {
 						//事件监听
 						$scope.song.link = 'api/song.php?song_id=' + item.songid;
-						$scope.playing = true;
+						player.src = 'api/song.php?song_id=' + item.songid;
 						player.play();
+						$scope.playing = true;
 					}
 				});
 			};
