@@ -128,15 +128,28 @@ hr {
   -webkit-animation: flash 1s linear infinite alternate;
 }
 .player .album_img {
-  width: 128px;
-  height: 128px;
+  width: 132px;
+  height: 132px;
   border-radius: 132px;
   -webkit-border-radius: 132px;
   -moz-border-radius: 132px;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.3);
-  border: 4px solid rgba(100, 100, 100, 0.2);
+  background: rgba(100, 100, 100, 0.2);
+  position: relative;
+}
+.player .album_img img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -64px;
+  margin-top: -64px;
+  width: 128px;
+  height: 128px;
+  border-radius: 128px;
+  -webkit-border-radius: 128px;
+  -moz-border-radius: 128px;
 }
 .player .album_img.active {
   animation: rotate linear 6s infinite;
@@ -177,10 +190,29 @@ hr {
   -webkit-box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.3);
 }
 .player .lrc {
-  height: 200px;
+  height: 140px;
+  padding: 30px 0;
   width: 100%;
-  background: #000000;
   margin-bottom: 10px;
+  background: #5e5e5e;
+  text-align: center;
+  border: 1px solid #f1f1f1;
+  overflow: hidden;
+  color: #bbbbbb;
+}
+.player .lrc .content {
+  transition: all linear .5s;
+  -webkit-transition: all linear .5s;
+  -moz-transition: all linear .5s;
+}
+.player .lrc .content > div {
+  margin: 8px 0;
+  transition: all linear .5s;
+  -webkit-transition: all linear .5s;
+  -moz-transition: all linear .5s;
+}
+.player .lrc .content .now {
+  color: white;
 }
 @keyframes rotate {
   0% {

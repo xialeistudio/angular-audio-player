@@ -3,7 +3,9 @@
  */
 (function() {
 	"use strict";
-	var ting = angular.module('ting', []);
+	var ting = angular.module('ting', [
+		'ngSanitize'
+	]);
 	ting.run(function() {
 		if (navigator.appVersion.indexOf('MSIE') != -1) {
 			document.write('本程序不支持IE浏览器。');
@@ -85,7 +87,7 @@
 							defer.resolve(data);
 						}
 					}).error(function(err) {
-						defer.reject('加载出错');
+						defer.reject('加载歌词出错');
 					});
 					return defer.promise;
 				}
@@ -109,6 +111,7 @@
 			$scope.keyword = '';
 			$scope.song = {};
 			var audio = document.getElementById('fr').contentWindow.document.getElementById('audio');
+			//禁止歌词的touch事件
 			//事件监听
 			audio.addEventListener('play', function() {
 				$scope.$apply(function() {
@@ -136,6 +139,21 @@
 			$scope.progressWidth = document.querySelector('.xl-progress-bar').clientWidth;
 			$scope.progress = 0;
 			audio.addEventListener('timeupdate', function(e) {
+				var time = parseInt(e.target.currentTime);
+				var lines = document.querySelectorAll('[data-timeline]');
+				var top=0;
+				for (var i in lines) {
+					var line = lines[i];
+					if (line.dataset != undefined) {
+						var timeline = parseInt(line.dataset.timeline);
+						if (timeline == time) {
+							line.className = "now";
+						}else if(timeline<time){
+							top+=line.clientHeight
+						}
+					}
+				}
+				document.querySelector('.lrc>.content').style.marginTop = -(top+20) + 'px';
 				$scope.$apply(function() {
 					$scope.song.currentTime = e.target.currentTime;
 					$scope.progress = $scope.song.currentTime / $scope.song.time;
@@ -166,6 +184,25 @@
 						var _maxIndex = $scope.list.length - 1;
 						$scope.hasPrev = _index > 0;
 						$scope.hasNext = _index <= _maxIndex;
+						//加载歌词
+						$scope.l_prev = '加载歌词中...';
+						var lrc = MusicService.lrc($scope.song.id);
+						var html = '';
+						lrc.then(function(data) {
+							var list = data.content.split("\n");
+							for (var i in list) {
+								var line = list[i];
+								var min = parseInt(line.substr(1, 2));
+								var sec = parseInt(line.substr(4, 2));
+								var t = min * 60 + sec;
+								var str = line.substring(10, line.length);
+								html += '<div data-timeline="' + t + '">' + str + '</div>';
+							}
+							$scope.song.lrc = html;
+						}, function(err) {
+							$scope.l_prev = err;
+						});
+						//
 						audio.play();
 					}, function(err) {
 						$scope.loading = false;
@@ -281,6 +318,13 @@
 					sec = input > 10 ? input : '0' + input;
 				}
 				return min + ':' + sec;
+			}
+		}
+	]);
+	ting.filter('html', [
+		'$sce', function($sce) {
+			return function(input) {
+				return $sce.trustAsHtml(input);
 			}
 		}
 	]);

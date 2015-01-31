@@ -42,7 +42,9 @@
 	<div class="col-md-3">
 		<div class="player" ng-show="song">
 			<!--歌曲图片-->
-			<img ng-class="{true:'active',false:''}[playing]" ng-src="api/img.php?img={{song.img}}" class="album_img" alt="{{song.title}}"/>
+			<div class="album_img" ng-class="{true:'active',false:''}[playing]">
+				<img ng-src="api/img.php?img={{song.img}}" class="" alt="{{song.title}}"/>
+			</div>
 
 			<h3 ng-bind="song.title"></h3>
 			<small ng-bind="song.author"></small>
@@ -86,7 +88,7 @@
 			</section>
 			<!--audio-->
 			<div class="lrc">
-
+				<div class="content" ng-bind-html="song.lrc|html"></div>
 			</div>
 
 		</div>
@@ -125,7 +127,8 @@
 		</div>
 	</div>
 	<iframe id="fr" src="javascript:parent.audio" frameborder="0"></iframe>
-	<script src="bower_components/angularjs/angular.min.js"></script>
+	<script src="bower_components/angular/angular.min.js"></script>
+	<script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 	<script src="main.js"></script>
 </body>
 </html>
