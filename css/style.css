@@ -189,6 +189,10 @@ hr {
   color: #999;
   font-size: .8em;
 }
+.xl-progress .current.duration,
+.xl-progress .duration.duration {
+  margin-left: 4px;
+}
 .xl-progress .xl-progress-bar {
   width: 65%;
   display: inline-block;
