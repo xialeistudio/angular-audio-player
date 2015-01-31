@@ -24,7 +24,7 @@
 				hot: function(offset, size) {
 					var defer = $q.defer();
 					$http.get('api/list.php?type=2&size=' + size + '&offset=' + offset, {
-						cache: false
+						cache: true
 					}).success(function(data) {
 						defer.resolve(data);
 					}).error(function(err) {
@@ -35,7 +35,7 @@
 				recent: function(offset, size) {
 					var defer = $q.defer();
 					$http.get('api/list.php?type=1&size=' + size + '&offset=' + offset, {
-						cache: false
+						cache: true
 					}).success(function(data) {
 						defer.resolve(data);
 					}).error(function(err) {
@@ -80,7 +80,7 @@
 						list: data.song_list
 					};
 					$scope.song = $scope.billboard.list[0];
-					$http.get('api/song.php?song_id='+$scope.song.song_id).success(function(data){
+					$http.get('api/song.php?song_id=' + $scope.song.song_id).success(function(data) {
 						$scope.song.link = data.url;
 						player.src = data.url;
 					});
@@ -102,7 +102,7 @@
 						list: data.song_list
 					};
 					$scope.song = $scope.billboard.list[0];
-					$http.get('api/song.php?song_id='+$scope.song.song_id).success(function(data){
+					$http.get('api/song.php?song_id=' + $scope.song.song_id).success(function(data) {
 						$scope.song.link = data.url;
 						player.src = data.url;
 					});
@@ -112,11 +112,18 @@
 				});
 			};
 			var player = document.getElementById('fr').contentWindow.document.getElementById('audio');
-			player.addEventListener('ended', function() {
+			player.addEventListener('play',function(){
+				$scope.$apply(function() {
+					$scope.playing = true;
+				});
+			},false);
+
+			player.addEventListener('pause',function(){
 				$scope.$apply(function() {
 					$scope.playing = false;
 				});
-			}, false);
+			},false);
+
 			$scope.player = {
 				volume: player.volume
 			};
@@ -124,7 +131,7 @@
 			$scope.play = function(item) {
 				//计算是否有上一首
 				var songid = $scope.song.song_id || $scope.song.songid;
-				if (songid!=item.song_id) {
+				if (songid != item.song_id) {
 					$scope.song = item;
 					var index = $scope.billboard.list.indexOf(item);
 					$scope.hasPrev = index > 0;
@@ -133,7 +140,7 @@
 					$scope.loading = true;
 					$scope.loading_text = '加载歌曲中...';
 					$http.get('api/song.php?song_id=' + item.song_id, {
-						cache: false
+						cache: true
 					}).success(function(data) {
 						$scope.loading = false;
 						if (data.error) {
@@ -144,7 +151,6 @@
 							$scope.song.link = data.url;
 							player.src = data.url;
 							player.play();
-							$scope.playing = true;
 							console.log(player.src);
 						}
 					});
@@ -152,13 +158,12 @@
 				else {
 					console.log(player.src);
 					player.play();
-					$scope.playing = true;
 				}
 			};
 			$scope.playSearch = function(item) {
 				//计算是否有上一首
 				var songid = $scope.song.song_id || $scope.song.songid;
-				if(songid!=item.songid){
+				if (songid != item.songid) {
 					$scope.song = item;
 					$scope.song.author = item.artistname;
 					$scope.song.pic_big = 'img/mp3.png';
@@ -169,7 +174,7 @@
 					$scope.loading = true;
 					$scope.loading_text = '加载歌曲中...';
 					$http.get('api/song.php?song_id=' + item.songid, {
-						cache: false
+						cache: true
 					}).success(function(data) {
 						$scope.loading = false;
 						if (data.error) {
@@ -178,18 +183,17 @@
 						else {
 							//事件监听
 							$scope.song.link = data.url;
-							player.src =  data.url;
+							player.src = data.url;
 							player.play();
-							$scope.playing = true;
 						}
 					});
-				}else{
+				}
+				else {
 					player.play();
-					$scope.playing = true;
 				}
 			};
+
 			$scope.pause = function() {
-				$scope.playing = false;
 				player.pause();
 			};
 			$scope.prev = function() {
@@ -213,6 +217,9 @@
 					song = $scope.billboard.list[++index];
 				}
 				$scope.play(song);
+			};
+			$scope.supported = function() {
+				return navigator.appVersion.indexOf('iPhone') == -1;
 			};
 			$scope.down = function() {
 				if (player.volume > 0) {
