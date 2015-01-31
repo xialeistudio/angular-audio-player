@@ -80,6 +80,7 @@
 						list: data.song_list
 					};
 					$scope.song = $scope.billboard.list[0];
+					player.src = 'api/song.php?song_id=' + $scope.song.song_id;
 				}, function(err) {
 					$rootScope.loading = false;
 					alert('加载热歌榜出错');
@@ -98,6 +99,7 @@
 						list: data.song_list
 					};
 					$scope.song = $scope.billboard.list[0];
+					player.src = 'api/song.php?song_id=' + $scope.song.song_id;
 				}, function(err) {
 					$rootScope.loading = false;
 					alert('加载新歌榜出错');
@@ -137,12 +139,14 @@
 							player.src = 'api/song.php?song_id=' + item.song_id;
 							player.play();
 							$scope.playing = true;
+							console.log(player.src);
 						}
 					});
 				}
 				else {
 					player.play();
 					$scope.playing = true;
+					console.log(player.src);
 				}
 			};
 			$scope.playSearch = function(item) {
