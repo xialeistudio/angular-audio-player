@@ -15,22 +15,31 @@ $params = array(
 		'format' => 'json',
 		'method' => 'baidu.ting.search.catalogSug'
 );
-$data = Request::get('http://tingapi.ting.baidu.com/v1/restserver/ting', $params);
-$data = json_decode($data, true);
-$need = array();
-$common['title'] = '【' . $keyword . '】的搜索结果';
-$common['desc'] = '歌曲来源于百度，本站仅供试听。';
-$common['date'] = '更新日期：' . date('Y-m-d');
-$need['common'] = $common;
-$list = array();
-foreach ($data['song'] as $row)
+try
 {
-	$tmp = array(
-			'id' => $row['songid'],
-			'title' => $row['songname'],
-			'author' => $row['artistname']
-	);
-	$list[] = $tmp;
+	$data = Request::get('http://tingapi.ting.baidu.com/v1/restserver/ting', $params);
+	$data = json_decode($data, true);
+	$need = array();
+	$common['title'] = '【' . $keyword . '】的搜索结果';
+	$common['desc'] = '歌曲来源于百度，本站仅供试听。';
+	$common['date'] = '更新日期：' . date('Y-m-d');
+	$need['common'] = $common;
+	$list = array();
+	foreach ($data['song'] as $row)
+	{
+		$tmp = array(
+				'id' => $row['songid'],
+				'title' => $row['songname'],
+				'author' => $row['artistname']
+		);
+		$list[] = $tmp;
+	}
+	$need['list'] = $list;
+	ajax($need);
 }
-$need['list'] = $list;
-ajax($need);
+catch (Exception $e)
+{
+	ajax(array(
+			'error' => '搜索失败'
+	));
+}

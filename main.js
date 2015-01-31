@@ -169,6 +169,8 @@
 			 * @param force
 			 */
 			$scope.load = function(item, force) {
+				//清除歌词高亮
+				document.querySelectorAll('.lrc>.content>div').className="";
 				if ((force != undefined && force) || item.id != $scope.song.id) {
 					//加载歌词，歌曲图片，作者，歌曲名称，
 					$scope.song = item;
@@ -267,17 +269,17 @@
 				var promise = MusicService.search($scope.keyword);
 				promise.then(function(data) {
 					$scope.loading = false;
-					if (data != null) {
+					if (data != null && !data.error) {
 						$scope.loading = false;
 						$scope.common = data.common;
 						$scope.list = data.list;
 					}
 					else {
-						alert('搜索失败')
+						alert('没有找到相关结果');
 					}
 				}, function(data) {
 					$scope.loading = false;
-					alert('查找失败');
+					alert('没有找到相关结果');
 				});
 			};
 			$scope.prev = function() {
