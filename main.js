@@ -184,6 +184,9 @@
 			$scope.pause = function() {
 				audio.pause();
 			};
+			/**
+			 * 热歌榜
+			 */
 			$scope.hot = function() {
 				$scope.$emit('loading', '加载热歌榜...');
 				var promise = MusicService.hot(0, 40);
@@ -198,6 +201,9 @@
 					alert('加载热歌榜出错');
 				});
 			};
+			/**
+			 * 新歌榜
+			 */
 			$scope.recent = function() {
 				$scope.$emit('loading', '加载新歌榜...');
 				var promise = MusicService.recent(0, 40);
@@ -212,6 +218,9 @@
 					alert('加载新歌榜出错');
 				});
 			};
+			/**
+			 * 搜索
+			 */
 			$scope.search = function() {
 				$scope.$emit('loading', '搜索【' + $scope.keyword + '】');
 				var promise = MusicService.search($scope.keyword);
