@@ -138,6 +138,10 @@
 				var lines = document.querySelectorAll('[data-timeline]');
 				var top = 0;
 				var _thisHeight = 0;
+				var nextLine = {
+					i: 0,
+					time: 0
+				};
 				for (var i in lines) {
 					var line = lines[i];
 					if (line.dataset != undefined) {
@@ -145,14 +149,29 @@
 						if (timeline == time) {
 							_thisHeight = line.clientHeight;
 							line.className = "now";
+							//获取下一句歌词
+							nextLine.i = parseInt(i) + 1;
+							try {
+								nextLine.time = lines[nextLine.i].dataset.timeline;
+							}
+							catch (e) {
+							}
+							if(nextLine.time>0){
+								var interval = nextLine.time - timeline;
+								(function(k){
+									setTimeout(function(){
+										lines[k].className="";
+									},interval*1000);
+								})(i);
+							}
+
+							document.querySelector('.lrc>.content').style.marginTop = -(top-_thisHeight) + 'px';
 						}
 						else if (timeline < time) {
 							top += line.clientHeight;
-							line.className = "";
 						}
 					}
 				}
-				document.querySelector('.lrc>.content').style.marginTop = -(top) + 'px';
 				$scope.$apply(function() {
 					$scope.song.currentTime = e.target.currentTime;
 					$scope.progress = $scope.song.currentTime / $scope.song.time;
@@ -312,7 +331,7 @@
 						var percent = (x - _beginX) / rect.width;//百分比
 						percent = percent > 1 ? 1 : percent;
 						var time = scope.song.time;
-						var played = time*percent;
+						var played = time * percent;
 						audio.currentTime = played;
 						scope.song.currentTime = played;
 					});
