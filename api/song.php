@@ -13,6 +13,10 @@ $data = Request::get('http://ting.baidu.com/data/music/links', array(
 		'songIds' => intval($_GET['song_id'])
 ));
 $data = json_decode($data, true);
+if ($data['errorCode'] != 22000)
+{
+	ajax(array('error' => '加载歌曲出错'));
+}
 $data = $data['data']['songList'][0];
 $info = array(
 		'id' => $data['songId'],
@@ -20,6 +24,6 @@ $info = array(
 		'author' => $data['artistName'],
 		'title' => $data['songName'],
 		'time' => $data['time'],
-		'audio'=>$data['songLink']
+		'audio' => $data['songLink']
 );
 ajax($info);

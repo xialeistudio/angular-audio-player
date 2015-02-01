@@ -169,10 +169,10 @@
 				}
 				if ((force != undefined && force) || item.id != $scope.song.id) {
 					//加载歌词，歌曲图片，作者，歌曲名称，
-					$scope.song = item;
-					$scope.$emit('loading', '加载【' + $scope.song.title + '】');
+					$scope.$emit('loading', '加载【' + item.title + '】');
 					var promise = MusicService.base(item.id);
 					promise.then(function(data) {
+						$scope.song = item;
 						$scope.loading = false;
 						$scope.song.img = data.img;
 						$scope.song.author = data.author;
@@ -208,7 +208,7 @@
 						audio.play();
 					}, function(err) {
 						$scope.loading = false;
-						alert('加载歌曲出错')
+						alert('加载歌曲出错');
 					});
 				}
 				else {
