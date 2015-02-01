@@ -103,6 +103,11 @@
 			var audio = document.getElementById('fr').contentWindow.document.getElementById('audio');
 			//禁止歌词的touch事件
 			//事件监听
+			window.addEventListener('resize',function(){
+				$scope.$apply(function(){
+					$scope.progressWidth = document.querySelector('.xl-progress-bar').clientWidth;
+				});
+			},false);
 			audio.addEventListener('play', function() {
 				$scope.$apply(function() {
 					$scope.playing = true;
