@@ -98,10 +98,11 @@
 			$scope.hasPrev = false;
 			$scope.hasNext = false;
 			$scope.playMode = 1;//默认播放全部
-			$scope.$watch('playMode',function(newVal,oldVal){
-				if(newVal){
+			$scope.$watch('playMode', function(newVal, oldVal) {
+				if (newVal) {
 					$scope.toastMsg('列表循环');
-				}else{
+				}
+				else {
 					$scope.toastMsg('单曲循环');
 				}
 			});
@@ -190,23 +191,23 @@
 					$scope.progress = $scope.song.currentTime / $scope.song.time;
 				});
 			}, false);
-			$scope.lrcSlow = function(){
+			$scope.lrcSlow = function() {
 				var _list = document.querySelectorAll('.lrc>.content>div');
 				if (_list.length > 0) {
-					for(var i in _list){
-						if(_list[i].dataset!=undefined){
-							_list[i].dataset.timeline = parseInt(_list[i].dataset.timeline)-1;
+					for (var i in _list) {
+						if (_list[i].dataset != undefined) {
+							_list[i].dataset.timeline = parseInt(_list[i].dataset.timeline) - 1;
 						}
 					}
 					$scope.toastMsg('歌词调快1s');
 				}
 			};
-			$scope.lrcFast = function(){
+			$scope.lrcFast = function() {
 				var _list = document.querySelectorAll('.lrc>.content>div');
 				if (_list.length > 0) {
-					for(var i in _list){
-						if(_list[i].dataset!=undefined){
-							_list[i].dataset.timeline = parseInt(_list[i].dataset.timeline)+1;
+					for (var i in _list) {
+						if (_list[i].dataset != undefined) {
+							_list[i].dataset.timeline = parseInt(_list[i].dataset.timeline) + 1;
 						}
 					}
 					$scope.toastMsg('歌词调慢1s');
@@ -270,7 +271,6 @@
 						$scope.loading = false;
 						alert('加载歌曲出错');
 					});
-
 				}
 				else {
 					audio.play();
@@ -386,12 +386,12 @@
 				if (input > 60) {
 					min = parseInt(input / 60);
 					sec = input - 60 * min;
-					min = min > 10 ? min : '0' + min;
-					sec = sec > 10 ? sec : '0' + sec;
+					min = min >= 10 ? min : '0' + min;
+					sec = sec >= 10 ? sec : '0' + sec;
 				}
 				else {
 					min = '00';
-					sec = input > 10 ? input : '0' + input;
+					sec = input >= 10 ? input : '0' + input;
 				}
 				return min + ':' + sec;
 			}
