@@ -256,10 +256,15 @@
 							for (var i in list) {
 								var line = list[i];
 								var min = parseInt(line.substr(1, 2));
-								var sec = parseInt(line.substr(4, 2));
-								var t = min * 60 + sec;
-								var str = line.substring(10, line.length);
-								html += '<div data-timeline="' + t + '">' + str + '</div>';
+								if(isNaN(min)){
+									$scope.toastMsg('加载歌词出错');
+									html = '歌词加载失败...';
+								}else{
+									var sec = parseInt(line.substr(4, 2));
+									var t = min * 60 + sec;
+									var str = line.substring(10, line.length);
+									html += '<div data-timeline="' + t + '">' + str + '</div>';
+								}
 							}
 							$scope.song.lrc = html;
 						}, function(err) {
@@ -269,7 +274,7 @@
 						audio.play();
 					}, function(err) {
 						$scope.loading = false;
-						alert('加载歌曲出错');
+						$scope.toastMsg('加载歌曲出错');
 					});
 				}
 				else {
@@ -305,7 +310,7 @@
 					$scope.load($scope.list[0]);
 				}, function(err) {
 					$scope.loading = false;
-					alert('加载热歌榜出错');
+					$scope.toastMsg('加载热歌榜出错');
 				});
 			};
 			/**
@@ -322,11 +327,11 @@
 						$scope.list = data.list;
 					}
 					else {
-						alert('没有找到相关结果');
+						$scope.toastMsg('没有找到相关结果');
 					}
 				}, function(data) {
 					$scope.loading = false;
-					alert('没有找到相关结果');
+					$scope.toastMsg('没有找到相关结果');
 				});
 			};
 			$scope.prev = function() {
