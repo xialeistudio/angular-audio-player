@@ -198,7 +198,7 @@
 							_list[i].dataset.timeline = parseInt(_list[i].dataset.timeline)-1;
 						}
 					}
-					$scope.toastMsg('歌词调慢1s');
+					$scope.toastMsg('歌词调快1s');
 				}
 			};
 			$scope.lrcFast = function(){
@@ -209,7 +209,7 @@
 							_list[i].dataset.timeline = parseInt(_list[i].dataset.timeline)+1;
 						}
 					}
-					$scope.toastMsg('歌词加快1s');
+					$scope.toastMsg('歌词调慢1s');
 				}
 			};
 			/**
