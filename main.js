@@ -103,11 +103,11 @@
 			var audio = document.getElementById('fr').contentWindow.document.getElementById('audio');
 			//禁止歌词的touch事件
 			//事件监听
-			window.addEventListener('resize',function(){
-				$scope.$apply(function(){
+			window.addEventListener('resize', function() {
+				$scope.$apply(function() {
 					$scope.progressWidth = document.querySelector('.xl-progress-bar').clientWidth;
 				});
-			},false);
+			}, false);
 			audio.addEventListener('play', function() {
 				$scope.$apply(function() {
 					$scope.playing = true;
@@ -297,6 +297,28 @@
 					}
 				}
 			};
+		}
+	]);
+	ting.directive('xlProgressBar', [
+		function() {
+			return {
+				link: function(scope, ele, attrs) {
+					var audio = document.getElementById('fr').contentWindow.document.getElementById('audio');
+					var point = ele[0].querySelector('.played');
+					var rect = ele[0].getBoundingClientRect();
+					var _beginX = rect.left;
+					var _endX = rect.right;
+					ele.bind('click', function(e) {
+						var x = e.x;
+						var percent = (x - _beginX) / rect.width;
+						percent = percent > 1 ? 1 : percent;
+						var time = scope.song.time;
+						var played = time*percent;
+						audio.currentTime = played;
+						scope.song.currentTime = played;
+					});
+				}
+			}
 		}
 	]);
 	ting.filter('formattime', [
