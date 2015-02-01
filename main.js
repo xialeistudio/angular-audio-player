@@ -162,9 +162,10 @@
 				var _ls = document.querySelectorAll('.lrc>.content>div');
 				if (_ls.length > 0) {
 					for (var i in _ls) {
-						_ls[i].className = "";
+						if (_ls[i].className != undefined) {
+							_ls[i].className = "";
+						}
 					}
-					;
 				}
 				if ((force != undefined && force) || item.id != $scope.song.id) {
 					//加载歌词，歌曲图片，作者，歌曲名称，
