@@ -252,3 +252,18 @@ hr {
     -moz-transform: rotate(360deg);
   }
 }
+.toast {
+  color: white;
+  font-size: .9em;
+  text-align: center;
+  position: fixed;
+  bottom: 40px;
+  width: 100%;
+}
+.toast .msg {
+  display: inline-block;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+}

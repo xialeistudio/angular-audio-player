@@ -87,7 +87,7 @@
 		'MusicService',
 		'$rootScope',
 		'$http',
-		'$scope', function(MusicService, $rootScope, $http, $scope) {
+		'$scope', '$timeout', function(MusicService, $rootScope, $http, $scope, $timeout) {
 			//加载文字
 			$rootScope.$on('loading', function(e, text) {
 				$scope.loading = true;
@@ -98,8 +98,22 @@
 			$scope.hasPrev = false;
 			$scope.hasNext = false;
 			$scope.playMode = 1;//默认播放全部
+			$scope.$watch('playMode',function(newVal,oldVal){
+				if(newVal){
+					$scope.toastMsg('列表循环');
+				}else{
+					$scope.toastMsg('单曲循环');
+				}
+			});
 			$scope.keyword = '';
 			$scope.song = {};
+			$scope.toast = '';
+			$scope.toastMsg = function(msg) {
+				$scope.toast = msg;
+				$timeout(function() {
+					$scope.toast = '';
+				}, 1500);
+			};
 			var audio = document.getElementById('fr').contentWindow.document.getElementById('audio');
 			//禁止歌词的touch事件
 			//事件监听
@@ -156,16 +170,15 @@
 							}
 							catch (e) {
 							}
-							if(nextLine.time>0){
+							if (nextLine.time > 0) {
 								var interval = nextLine.time - timeline;
-								(function(k){
-									setTimeout(function(){
-										lines[k].className="";
-									},interval*1000);
+								(function(k) {
+									setTimeout(function() {
+										lines[k].className = "";
+									}, interval * 1000);
 								})(i);
 							}
-
-							document.querySelector('.lrc>.content').style.marginTop = -(top-_thisHeight) + 'px';
+							document.querySelector('.lrc>.content').style.marginTop = -(top - _thisHeight) + 'px';
 						}
 						else if (timeline < time) {
 							top += line.clientHeight;
@@ -177,6 +190,28 @@
 					$scope.progress = $scope.song.currentTime / $scope.song.time;
 				});
 			}, false);
+			$scope.lrcSlow = function(){
+				var _list = document.querySelectorAll('.lrc>.content>div');
+				if (_list.length > 0) {
+					for(var i in _list){
+						if(_list[i].dataset!=undefined){
+							_list[i].dataset.timeline = parseInt(_list[i].dataset.timeline)-1;
+						}
+					}
+					$scope.toastMsg('歌词调慢1s');
+				}
+			};
+			$scope.lrcFast = function(){
+				var _list = document.querySelectorAll('.lrc>.content>div');
+				if (_list.length > 0) {
+					for(var i in _list){
+						if(_list[i].dataset!=undefined){
+							_list[i].dataset.timeline = parseInt(_list[i].dataset.timeline)+1;
+						}
+					}
+					$scope.toastMsg('歌词加快1s');
+				}
+			};
 			/**
 			 * 设置将要播放的歌曲
 			 * @param item
@@ -210,7 +245,7 @@
 						var _index = $scope.list.indexOf(item);
 						var _maxIndex = $scope.list.length - 1;
 						$scope.hasPrev = _index > 0;
-						$scope.hasNext = _index <= _maxIndex;
+						$scope.hasNext = _index < _maxIndex;
 						//加载歌词
 						$scope.l_prev = '加载歌词中...';
 						var lrc = MusicService.lrc($scope.song.id);
@@ -235,6 +270,7 @@
 						$scope.loading = false;
 						alert('加载歌曲出错');
 					});
+
 				}
 				else {
 					audio.play();
@@ -294,10 +330,12 @@
 				});
 			};
 			$scope.prev = function() {
+				$scope.toastMsg('上一首');
 				var _index = $scope.list.indexOf($scope.song);
 				$scope.load($scope.list[--_index]);
 			};
 			$scope.next = function() {
+				$scope.toastMsg('下一首');
 				var _index = $scope.list.indexOf($scope.song);
 				$scope.load($scope.list[++_index]);
 			};

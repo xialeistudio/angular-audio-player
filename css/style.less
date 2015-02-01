@@ -222,11 +222,11 @@ hr {
 		border: 1px solid #f1f1f1;
 		overflow: hidden;
 		color: #bbbbbb;
-		.content{
+		.content {
 			transition: all linear .5s;
 			-webkit-transition: all linear .5s;
 			-moz-transition: all linear .5s;
-			&>div{
+			& > div {
 				transition: all linear .5s;
 				-webkit-transition: all linear .5s;
 				-moz-transition: all linear .5s;
@@ -274,5 +274,21 @@ hr {
 		transform: rotate(360deg);
 		-webkit-transform: rotate(360deg);
 		-moz-transform: rotate(360deg);
+	}
+}
+
+.toast {
+	color: white;
+	font-size: .9em;
+	text-align: center;
+	position: fixed;
+	bottom: 40px;
+	width: 100%;
+	.msg {
+		display: inline-block;
+		padding: 10px;
+		background: rgba(0,0,0,0.7);
+		border-radius: 4px;
+		-webkit-border-radius: 4px;
 	}
 }
