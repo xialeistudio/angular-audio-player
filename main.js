@@ -258,7 +258,6 @@
 								var min = parseInt(line.substr(1, 2));
 								if(isNaN(min)){
 									$scope.toastMsg('加载歌词出错');
-									html = '歌词加载失败...';
 								}else{
 									var sec = parseInt(line.substr(4, 2));
 									var t = min * 60 + sec;
