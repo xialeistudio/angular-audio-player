@@ -305,12 +305,11 @@
 			return {
 				link: function(scope, ele, attrs) {
 					var audio = document.getElementById('fr').contentWindow.document.getElementById('audio');
-					var rect = ele[0].getBoundingClientRect();
-					var _beginX = rect.left;
-					var _endX = rect.right;
 					ele.bind('click', function(e) {
-						var x = e.x;
-						var percent = (x - _beginX) / rect.width;
+						var rect = ele[0].getBoundingClientRect(); //进度条rect
+						var _beginX = rect.left;//进度条X坐标
+						var x = e.x;//点击点坐标
+						var percent = (x - _beginX) / rect.width;//百分比
 						percent = percent > 1 ? 1 : percent;
 						var time = scope.song.time;
 						var played = time*percent;
