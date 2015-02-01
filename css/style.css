@@ -214,7 +214,7 @@ hr {
   -moz-transition: all linear .5s;
 }
 .player .lrc .content .now {
-  color: white;
+  color: #ffff00;
 }
 @keyframes rotate {
   0% {

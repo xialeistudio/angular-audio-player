@@ -148,6 +148,7 @@
 						}
 						else if (timeline < time) {
 							top += line.clientHeight;
+							line.className = "";
 						}
 					}
 				}
@@ -304,7 +305,6 @@
 			return {
 				link: function(scope, ele, attrs) {
 					var audio = document.getElementById('fr').contentWindow.document.getElementById('audio');
-					var point = ele[0].querySelector('.played');
 					var rect = ele[0].getBoundingClientRect();
 					var _beginX = rect.left;
 					var _endX = rect.right;
