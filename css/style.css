@@ -259,6 +259,7 @@ hr {
   position: fixed;
   bottom: 40px;
   width: 100%;
+  left: 0;
 }
 .toast .msg {
   display: inline-block;
