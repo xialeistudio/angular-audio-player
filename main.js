@@ -163,7 +163,7 @@
 				if (_ls.length > 0) {
 					for (var i in _ls) {
 						if (_ls[i].className != undefined) {
-							_ls[i].className = "";
+							_ls[i].className = '';
 						}
 					}
 				}
