@@ -252,18 +252,8 @@
 						var lrc = MusicService.lrc($scope.song.id);
 						var html = '';
 						lrc.then(function(data) {
-							if(!/\d{2}:\d{2}\.\d{2}/.test(data.content)){
-								$scope.toastMsg('加载歌词出错');
-							}else{
-								var list = data.content.split("\n");
-								for (var i in list) {
-									var line = list[i];
-									var min = parseInt(line.substr(1, 2));
-									var sec = parseInt(line.substr(4, 2));
-									var t = min * 60 + sec;
-									var str = line.substring(10, line.length);
-									html += '<div data-timeline="' + t + '">' + str + '</div>';
-								}
+							for(var i in data){
+								html += '<div data-timeline="' + data[i].time + '">' + data[i].text + '</div>';
 							}
 							$scope.song.lrc = html;
 						}, function(err) {

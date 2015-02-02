@@ -24,12 +24,34 @@ if (isset($data['error_code']) && $data['error_code'] == 22005)
 			'error' => '歌词加载失败'
 	));
 }
-if(!isset($data['title'])){
+if (!isset($data['title']))
+{
 	ajax(array(
 			'error' => '歌词加载失败'
 	));
 }
-ajax(array(
-		'title' => $data['title'],
-		'content' => $data['lrcContent']
-));
+$pattern = '/(\[.*\])+(.+)?/';
+$timePattern = '/(\d{2}):(\d{2})\.(\d{2})/';
+$list = explode("\n", $data['lrcContent']);
+$lrc = array();
+foreach ($list as $row)
+{
+	preg_match_all($pattern, $row, $texts);
+	if(!isset($texts[1][0]))
+		continue;
+	$time = $texts[1][0];
+	$text = $texts[2][0];
+	preg_match_all($timePattern, $time, $times);
+	$mins = $times[1];
+	$secs = $times[2];
+	foreach ($mins as $key => $min)
+	{
+		$_t = $min * 60 + $secs[$key];
+		$lrc[] = array(
+				'time' => $_t,
+				'text' => $text
+		);
+	}
+}
+$lrc = array_sort($lrc,'time');
+ajax($lrc);
