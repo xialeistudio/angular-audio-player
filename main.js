@@ -50,9 +50,7 @@
 				},
 				base: function(id) {
 					var defer = $q.defer();
-					$http.get('api/song.php?song_id=' + id, {
-						cache: true
-					}).success(function(data) {
+					$http.get('api/song.php?song_id=' + id).success(function(data) {
 						if (data.error) {
 							defer.reject(data.error);
 						}
