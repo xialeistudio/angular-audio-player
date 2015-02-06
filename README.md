@@ -11,4 +11,4 @@
 ## 作者
 [每天进步一点点](http://www.ddhigh.com)
 ## 特别说明
-由于coding.net的带宽问题，播放可能有些不流畅，大家可以前往 [http://ngplayer.sinaapp.com/](http://ngplayer.sinaapp.com/) 查看效果
+防盗链已解决,coding.net也能流畅播放了
