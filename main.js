@@ -250,7 +250,7 @@
 						var lrc = MusicService.lrc($scope.song.id);
 						var html = '';
 						lrc.then(function(data) {
-							for(var i in data){
+							for (var i in data) {
 								html += '<div data-timeline="' + data[i].time + '">' + data[i].text + '</div>';
 							}
 							$scope.song.lrc = html;
@@ -372,7 +372,7 @@
 	ting.filter('formattime', [
 		function() {
 			return function(input) {
-				input = parseInt(input);
+				input = parseInt(input) || 0;
 				var min = 0;
 				var sec = 0;
 				if (input > 60) {
