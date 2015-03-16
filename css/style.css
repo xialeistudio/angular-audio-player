@@ -9,6 +9,7 @@ body {
 }
 .collapse.active {
   display: block;
+  visibility: visible;
 }
 h1,
 .h1,
