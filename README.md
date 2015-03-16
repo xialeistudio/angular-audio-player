@@ -3,6 +3,7 @@
 ## 部署
 1.如果你下载的程序不含bower_components文件夹，请执行 bower install
 2.如果你下载的程序不含node_modules文件夹，请执行 npm install
+3.gulp可以编译所有用到的静态资源
 本程序开通演示即可使用
 ## 功能
 + 歌曲榜单
