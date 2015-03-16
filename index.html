@@ -1,152 +1,154 @@
 <!DOCTYPE html>
 <html ng-app="ting">
 <head lang="zh-cn">
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=0">
-	<title>Music</title>
-	<link rel="stylesheet" href="css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
-	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css"/>
-	<link rel="stylesheet" href="css/style.css"/>
-	<script>
-		window.audio = '<audio id="audio"></audio>';
-	</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=0">
+    <title>Music</title>
+    <link rel="stylesheet" href="http://static.ddhigh.com/build/css/style.css"/>
+    <script>
+        window.audio = '<audio id="audio"></audio>';
+    </script>
 </head>
 <body ng-controller="RootController">
 <header class="navbar navbar-static-top navbar-default" id="top" role="banner">
-	<div class="container">
-		<div class="navbar-header">
-			<button class="navbar-toggle" type="button" xl-toggle=".xl-navbar-collapse">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<a ng-href="#/" class="navbar-brand">Music</a>
-		</div>
-		<nav class="collapse navbar-collapse xl-navbar-collapse" role="navigation">
-			<ul class="nav navbar-nav">
-				<li><a href="javascript:void(0)" ng-click="common.title = '新歌榜';loadList(1)">新歌榜</a></li>
-				<li><a href="javascript:void(0)" ng-click="common.title = '热歌榜';loadList(2)">热歌榜</a></li>
-				<li><a href="javascript:void(0)" ng-click="common.title = '摇滚榜';loadList(11)">摇滚榜</a></li>
-				<li><a href="javascript:void(0)" ng-click="common.title = '爵士榜';loadList(12)">爵士榜</a></li>
-				<li><a href="javascript:void(0)" ng-click="common.title = '流行榜';loadList(16)">流行榜</a></li>
-				<li><a href="javascript:void(0)" ng-click="common.title = '欧美流行榜';loadList(21)">欧美流行榜</a></li>
-				<li><a href="javascript:void(0)" ng-click="common.title = '经典老歌榜';loadList(22)">经典老歌榜</a></li>
-				<li><a href="javascript:void(0)" ng-click="common.title = '情歌对唱榜';loadList(23)">情歌对唱榜</a></li>
-				<li><a href="javascript:void(0)" ng-click="common.title = '影视金曲榜';loadList(24)">影视金曲榜</a></li>
-				<li><a href="javascript:void(0)" ng-click="common.title = '网络歌曲榜';loadList(25)">网络歌曲榜</a></li>
-			</ul>
-			<ul class="nav navbar-nav navbar-right">
-				<li><a href="http://music.baidu.com" target="_blank">百度音乐</a></li>
-				<li><a href="http://www.ddhigh.com" target="_blank">作者博客</a></li>
-			</ul>
-		</nav>
-	</div>
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" xl-toggle=".xl-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a ng-href="#/" class="navbar-brand">Music</a>
+        </div>
+        <nav class="collapse navbar-collapse xl-navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav">
+                <li><a href="javascript:void(0)" ng-click="common.title = '新歌榜';loadList(1)">新歌榜</a></li>
+                <li><a href="javascript:void(0)" ng-click="common.title = '热歌榜';loadList(2)">热歌榜</a></li>
+                <li><a href="javascript:void(0)" ng-click="common.title = '摇滚榜';loadList(11)">摇滚榜</a></li>
+                <li><a href="javascript:void(0)" ng-click="common.title = '爵士榜';loadList(12)">爵士榜</a></li>
+                <li><a href="javascript:void(0)" ng-click="common.title = '流行榜';loadList(16)">流行榜</a></li>
+                <li><a href="javascript:void(0)" ng-click="common.title = '欧美流行榜';loadList(21)">欧美流行榜</a></li>
+                <li><a href="javascript:void(0)" ng-click="common.title = '经典老歌榜';loadList(22)">经典老歌榜</a></li>
+                <li><a href="javascript:void(0)" ng-click="common.title = '情歌对唱榜';loadList(23)">情歌对唱榜</a></li>
+                <li><a href="javascript:void(0)" ng-click="common.title = '影视金曲榜';loadList(24)">影视金曲榜</a></li>
+                <li><a href="javascript:void(0)" ng-click="common.title = '网络歌曲榜';loadList(25)">网络歌曲榜</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://music.baidu.com" target="_blank">百度音乐</a></li>
+                <li><a href="http://www.ddhigh.com" target="_blank">作者博客</a></li>
+            </ul>
+        </nav>
+    </div>
 </header>
 
 <div class="container">
-	<div class="col-md-3">
-		<div class="player" ng-show="song">
-			<div ng-if="ios">
-				<small>由于IOS系统限制，列表歌曲需要点击“播放”两次才能播放。（每次加载只有第一次需要点击两次）</small>
-			</div>
-			<!--歌曲图片-->
-			<div class="album_img" ng-class="{true:'active',false:''}[playing]">
-				<img ng-src="api/img.php?img={{song.img}}" class="" alt="{{song.title}}"/>
-			</div>
+    <div class="col-md-3">
+        <div class="player" ng-show="song">
+            <div ng-if="ios">
+                <small>由于IOS系统限制，列表歌曲需要点击“播放”两次才能播放。（每次加载只有第一次需要点击两次）</small>
+            </div>
+            <!--歌曲图片-->
+            <div class="album_img" ng-class="{true:'active',false:''}[playing]">
+                <img ng-src="api/img.php?img={{song.img}}" class="" alt="{{song.title}}"/>
+            </div>
 
-			<h3 ng-bind="song.title"></h3>
-			<small ng-bind="song.author"></small>
-			<!--操作区-->
-			<div class="btn-toolbar">
-				<div class="btn-group">
-					<button type="button" ng-click="prev()" ng-class="{true:'',false:'disabled'}[hasPrev]" class="btn btn-default"><i class="fa fa-step-backward"></i></button>
-					<button type="button" class="btn btn-default" ng-click="play()" ng-if="!playing"><i class="fa fa-play"></i></button>
-					<button type="button" class="btn btn-default" ng-click="pause()" ng-if="playing"><i class="fa fa-pause"></i></button>
-					<button type="button" ng-click="next()" ng-class="{true:'',false:'disabled'}[hasNext]" class="btn btn-default"><i class="fa fa-step-forward"></i></button>
+            <h3 ng-bind="song.title"></h3>
+            <small ng-bind="song.author"></small>
+            <!--操作区-->
+            <div class="btn-toolbar">
+                <div class="btn-group">
+                    <button type="button" ng-click="prev()" ng-class="{true:'',false:'disabled'}[hasPrev]"
+                            class="btn btn-default"><i class="fa fa-step-backward"></i></button>
+                    <button type="button" class="btn btn-default" ng-click="play()" ng-if="!playing"><i
+                            class="fa fa-play"></i></button>
+                    <button type="button" class="btn btn-default" ng-click="pause()" ng-if="playing"><i
+                            class="fa fa-pause"></i></button>
+                    <button type="button" ng-click="next()" ng-class="{true:'',false:'disabled'}[hasNext]"
+                            class="btn btn-default"><i class="fa fa-step-forward"></i></button>
 
-					<button type="button" class="btn btn-default" ng-click="playMode=!playMode">
-						<i class="fa fa-refresh" title="单曲循环" ng-if="!playMode"></i>
-						<i class="fa fa-repeat" title="循环播放" ng-if="playMode"></i>
-					</button>
+                    <button type="button" class="btn btn-default" ng-click="playMode=!playMode">
+                        <i class="fa fa-refresh" title="单曲循环" ng-if="!playMode"></i>
+                        <i class="fa fa-repeat" title="循环播放" ng-if="playMode"></i>
+                    </button>
 
-					<button title="歌词调快1s" ng-click="lrcSlow()" type="button" class="btn btn-default"><i class="fa fa-angle-double-up"></i></button>
-					<button title="歌词调慢1s" ng-click="lrcFast()" type="button" class="btn btn-default"><i class="fa fa-angle-double-down"></i></button>
-				</div>
-			</div>
-			<!--进度条-->
-			<div class="xl-progress">
-				<span class="current" ng-bind="song.currentTime|formattime"></span>
+                    <button title="歌词调快1s" ng-click="lrcSlow()" type="button" class="btn btn-default"><i
+                            class="fa fa-angle-double-up"></i></button>
+                    <button title="歌词调慢1s" ng-click="lrcFast()" type="button" class="btn btn-default"><i
+                            class="fa fa-angle-double-down"></i></button>
+                </div>
+            </div>
+            <!--进度条-->
+            <div class="xl-progress">
+                <span class="current" ng-bind="song.currentTime|formattime"></span>
 
-				<div class="xl-progress-bar"  xl-progress-bar>
-					<div class="played" style="margin-left: {{progress*progressWidth}}px"></div>
-				</div>
-				<span class="duration" ng-bind="song.time|formattime"></span>
-			</div>
-			<hr/>
+                <div class="xl-progress-bar" xl-progress-bar>
+                    <div class="played" style="margin-left: {{progress*progressWidth}}px"></div>
+                </div>
+                <span class="duration" ng-bind="song.time|formattime"></span>
+            </div>
+            <hr/>
 
-			<section>
-				<!--搜索-->
-				<div class="form-horizontal">
-					<div class="form-group">
-						<div class="col-xs-8">
-							<input type="text" ng-model="keyword" placeholder="歌名、歌手" class="form-control input-sm"/>
-						</div>
-						<div class="col-xs-4">
-							<button type="button" class="btn btn-sm btn-primary btn-block" ng-click="search()"> 搜索</button>
-						</div>
-					</div>
-				</div>
-			</section>
-			<!--audio-->
-			<div class="lrc">
-				<div class="content" ng-bind-html="song.lrc|html"></div>
-			</div>
+            <section>
+                <!--搜索-->
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-xs-8">
+                            <input type="text" ng-model="keyword" placeholder="歌名、歌手" class="form-control input-sm"/>
+                        </div>
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-sm btn-primary btn-block" ng-click="search()"> 搜索
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!--audio-->
+            <div class="lrc">
+                <div class="content" ng-bind-html="song.lrc|html"></div>
+            </div>
 
-		</div>
-	</div>
-	<div class="col-md-9">
-		<h2 ng-init="loadList(2)">{{common.title}}
-		</h2>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <h2 ng-init="loadList(2)">{{common.title}}
+        </h2>
 
-		<div>
-			<small>更新日期：{{common.date}}</small>
-		</div>
-		<p ng-bind="common.desc"></p>
+        <div>
+            <small>更新日期：{{common.date}}</small>
+        </div>
+        <p ng-bind="common.desc"></p>
 
-		<div class="list-group">
-			<div class="list-group-item clearfix" ng-repeat="item in list">
-				<div class="pull-left"><i class="fa fa-play text-success" ng-if="playing && song.id == item.id"></i>
-					{{item.title}}
-					<small>{{item.author}}</small>
-				</div>
-				<div class="pull-right">
-					<a href="javascript:void(0)" ng-click="load(item)" ng-if="!playing || song.id!=item.id">播放</a>
-					<a href="javascript:void(0)" ng-click="pause()" ng-if="playing && song.id == item.id">暂停</a>
-				</div>
-			</div>
-		</div>
-	</div>
+        <div class="list-group">
+            <div class="list-group-item clearfix" ng-repeat="item in list">
+                <div class="pull-left"><i class="fa fa-play text-success" ng-if="playing && song.id == item.id"></i>
+                    {{item.title}}
+                    <small>{{item.author}}</small>
+                </div>
+                <div class="pull-right">
+                    <a href="javascript:void(0)" ng-click="load(item)" ng-if="!playing || song.id!=item.id">播放</a>
+                    <a href="javascript:void(0)" ng-click="pause()" ng-if="playing && song.id == item.id">暂停</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-	<div class="modal" ng-if="loading">
-		<!--	loading-->
-		<div class="loading">
-			<div class="circle">
-				<span class="point"></span>
-			</div>
-			<div class="text" ng-bind="loading_text || 'loading...'"></div>
-		</div>
-	</div>
+    <div class="modal" ng-if="loading">
+        <!--	loading-->
+        <div class="loading">
+            <div class="circle">
+                <span class="point"></span>
+            </div>
+            <div class="text" ng-bind="loading_text || 'loading...'"></div>
+        </div>
+    </div>
 
-	<div class="toast">
-		<span class="msg" ng-bind="toast" ng-if="toast"></span>
-	</div>
-	<iframe id="fr" src="javascript:parent.audio" frameborder="0"></iframe>
-	<script src="bower_components/angular/angular.min.js"></script>
-	<script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
-	<script src="main.js"></script>
+    <div class="toast">
+        <span class="msg" ng-bind="toast" ng-if="toast"></span>
+    </div>
+    <iframe id="fr" src="javascript:parent.audio" frameborder="0"></iframe>
+    <script src="http://static.ddhigh.com/build/js/main.js"></script>
 </body>
 </html>

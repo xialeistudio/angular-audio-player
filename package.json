@@ -1,0 +1,22 @@
+{
+  "name": "mp3.coding.io",
+  "version": "1.0.0",
+  "description": "基于angularjs开发的MP3播放器，数据来源来自百度音乐，在所有支持HTML5的浏览器都运行（PC,PHONE,PAD,etc...）\r ## 功能\r + 歌曲榜单\r + 歌曲搜索\r + 歌曲播放\r + 歌词同步\r + 线控切歌\r + 歌词微调",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://coding.net/xialei/ngPlayer.git"
+  },
+  "author": "xialei<xialeistudio@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "del": "^1.1.1",
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-cssmin": "^0.1.6",
+    "gulp-uglify": "^1.1.0"
+  }
+}
