@@ -7,7 +7,18 @@ body {
   background-color: #069;
   border-color: #005c8a;
 }
+.navbar-default .navbar-brand {
+  color: white !important;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:active {
+  color: #ffffff !important;
+}
 .navbar-default .navbar-nav li a {
+  color: #ffffff !important;
+}
+.navbar-default .navbar-nav li a:hover,
+.navbar-default .navbar-nav li a:active {
   color: #ffffff !important;
 }
 .collapse.active {
