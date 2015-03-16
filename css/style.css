@@ -13,6 +13,9 @@ body {
 .navbar-default .navbar-toggle:hover {
   background-color: #069;
 }
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: white;
+}
 .navbar-default .navbar-brand {
   color: white !important;
 }
