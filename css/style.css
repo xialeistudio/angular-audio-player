@@ -7,6 +7,12 @@ body {
   background-color: #069;
   border-color: #005c8a;
 }
+.navbar-default .navbar-toggle {
+  border-color: #005078;
+}
+.navbar-default .navbar-toggle:hover {
+  background-color: #069;
+}
 .navbar-default .navbar-brand {
   color: white !important;
 }
